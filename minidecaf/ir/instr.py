@@ -20,3 +20,16 @@ class Ret(IRInstr):
     def __str__(self):
         return f"ret"
 
+class Neg(IRInstr):
+    def __str__(self):
+        return f"neg"
+
+class Not(IRInstr):
+    def __str__(self):
+        return f"not"
+
+class LNOT(IRInstr):
+    def __str__(self):
+        return f"lnot"
+
+    

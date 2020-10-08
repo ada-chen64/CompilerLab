@@ -16,7 +16,11 @@ statement
     : Return expression Semicolon #returnStmt
     ;
 expression
-    : Integer
+    : unary
+    ;
+unary
+    : atom #tUnary
+    | ('-'|'!'|'~') unary #cUnary
     ;
 expr
     : add

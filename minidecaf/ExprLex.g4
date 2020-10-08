@@ -14,6 +14,8 @@ Add: '+';
 Sub: '-';
 Mul: '*';
 Div: '/';
+LNot: '!';
+Not: '~';
 
 // 整数
 Integer: [0-9]+;

@@ -10,7 +10,7 @@ class AsmEmitter:
     def emit(self, com:AsmCommand):
         # print(f"{com}", file=self.f)
         self.s += f"{com}\n"
-        # print(f"{com}")
+        #print(f"{com}")
 
     def getASM(self):
         return self.s
@@ -20,5 +20,4 @@ class AsmEmitter:
 
     def __call__(self, coms:[AsmCommand]):
         for com in coms:
-            #print(com)
             self.emit(com)

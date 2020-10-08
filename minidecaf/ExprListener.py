@@ -1,4 +1,4 @@
-# Generated from Expr.g4 by ANTLR 4.8
+# Generated from Expr.g4 by ANTLR 4.7.2
 from antlr4 import *
 if __name__ is not None and "." in __name__:
     from .ExprParser import ExprParser
@@ -50,6 +50,24 @@ class ExprListener(ParseTreeListener):
 
     # Exit a parse tree produced by ExprParser#expression.
     def exitExpression(self, ctx:ExprParser.ExpressionContext):
+        pass
+
+
+    # Enter a parse tree produced by ExprParser#tUnary.
+    def enterTUnary(self, ctx:ExprParser.TUnaryContext):
+        pass
+
+    # Exit a parse tree produced by ExprParser#tUnary.
+    def exitTUnary(self, ctx:ExprParser.TUnaryContext):
+        pass
+
+
+    # Enter a parse tree produced by ExprParser#cUnary.
+    def enterCUnary(self, ctx:ExprParser.CUnaryContext):
+        pass
+
+    # Exit a parse tree produced by ExprParser#cUnary.
+    def exitCUnary(self, ctx:ExprParser.CUnaryContext):
         pass
 
 
@@ -107,5 +125,3 @@ class ExprListener(ParseTreeListener):
         pass
 
 
-
-del ExprParser

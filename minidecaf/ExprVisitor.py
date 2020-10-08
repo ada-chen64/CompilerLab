@@ -1,4 +1,4 @@
-# Generated from Expr.g4 by ANTLR 4.8
+# Generated from Expr.g4 by ANTLR 4.7.2
 from antlr4 import *
 if __name__ is not None and "." in __name__:
     from .ExprParser import ExprParser
@@ -31,6 +31,16 @@ class ExprVisitor(ParseTreeVisitor):
 
     # Visit a parse tree produced by ExprParser#expression.
     def visitExpression(self, ctx:ExprParser.ExpressionContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by ExprParser#tUnary.
+    def visitTUnary(self, ctx:ExprParser.TUnaryContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by ExprParser#cUnary.
+    def visitCUnary(self, ctx:ExprParser.CUnaryContext):
         return self.visitChildren(ctx)
 
 
