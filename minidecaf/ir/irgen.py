@@ -5,6 +5,7 @@ from ..utils import *
 from ..ExprParser import ExprParser
 from ..ExprVisitor import ExprVisitor
 
+
 class StackIRGen(ExprVisitor):
     def __init__(self, emitter:IREmitter):
         self._E = emitter
@@ -37,3 +38,16 @@ class StackIRGen(ExprVisitor):
         v = int(text(ctx.Integer()))
         #print(v)
         self._E(instr.Const(v))
+    def visitAddOpMult(self, ctx:ExprParser.AddOpMultContext):
+        self.visitChildren(ctx)
+        if(ctx.Add()):
+            op = text(ctx.Add())
+        if(ctx.Sub()):
+            op = text(ctx.Sub())
+        self._E(instr.Binaries(op))
+        #print(op)
+    def visitMultOpUnary(self, ctx:ExprParser.MultOpUnaryContext):
+        self.visitChildren(ctx)
+        op = text(ctx.MulOp())
+        self._E(instr.Binaries(op))
+        #print(op)

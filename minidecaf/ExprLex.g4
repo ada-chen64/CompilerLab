@@ -14,6 +14,7 @@ Add: '+';
 Sub: '-';
 Mul: '*';
 Div: '/';
+Mod: '%';
 LNot: '!';
 Not: '~';
 

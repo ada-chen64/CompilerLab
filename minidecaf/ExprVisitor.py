@@ -34,6 +34,26 @@ class ExprVisitor(ParseTreeVisitor):
         return self.visitChildren(ctx)
 
 
+    # Visit a parse tree produced by ExprParser#addOpMult.
+    def visitAddOpMult(self, ctx:ExprParser.AddOpMultContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by ExprParser#addMult.
+    def visitAddMult(self, ctx:ExprParser.AddMultContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by ExprParser#multOpUnary.
+    def visitMultOpUnary(self, ctx:ExprParser.MultOpUnaryContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by ExprParser#multUnary.
+    def visitMultUnary(self, ctx:ExprParser.MultUnaryContext):
+        return self.visitChildren(ctx)
+
+
     # Visit a parse tree produced by ExprParser#tUnary.
     def visitTUnary(self, ctx:ExprParser.TUnaryContext):
         return self.visitChildren(ctx)
@@ -44,33 +64,13 @@ class ExprVisitor(ParseTreeVisitor):
         return self.visitChildren(ctx)
 
 
-    # Visit a parse tree produced by ExprParser#expr.
-    def visitExpr(self, ctx:ExprParser.ExprContext):
-        return self.visitChildren(ctx)
-
-
-    # Visit a parse tree produced by ExprParser#add.
-    def visitAdd(self, ctx:ExprParser.AddContext):
-        return self.visitChildren(ctx)
-
-
-    # Visit a parse tree produced by ExprParser#mul.
-    def visitMul(self, ctx:ExprParser.MulContext):
-        return self.visitChildren(ctx)
-
-
-    # Visit a parse tree produced by ExprParser#atomParen.
-    def visitAtomParen(self, ctx:ExprParser.AtomParenContext):
-        return self.visitChildren(ctx)
-
-
     # Visit a parse tree produced by ExprParser#atomInteger.
     def visitAtomInteger(self, ctx:ExprParser.AtomIntegerContext):
         return self.visitChildren(ctx)
 
 
-    # Visit a parse tree produced by ExprParser#mulOp.
-    def visitMulOp(self, ctx:ExprParser.MulOpContext):
+    # Visit a parse tree produced by ExprParser#atomParen.
+    def visitAtomParen(self, ctx:ExprParser.AtomParenContext):
         return self.visitChildren(ctx)
 
 

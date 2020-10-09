@@ -3,11 +3,13 @@ riscv.py
 import sys
 sys.path.append('..')
 from ..ir.instr import *
+from ..utils import *
 from . import *
 
 import sys
 sys.path.append('..')
 from ir.instr import *
+from utils import *
 from . import *
 
 instr.py
@@ -61,3 +63,6 @@ from ir import IREmitter
 from ir.irgen import StackIRGen
 from asm import AsmEmitter
 from asm.riscv import RISCVAsmGen as AsmGen
+
+
+(program (function (typ int) main ( ) { (statement return (expression (add (add (add (mult (unary (atom 1)))) - (mult (unary (atom 2)))) - (mult (unary (atom 3))))) ;) }) <EOF>)

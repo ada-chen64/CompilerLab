@@ -31,5 +31,10 @@ class Not(IRInstr):
 class LNOT(IRInstr):
     def __str__(self):
         return f"lnot"
+class Binaries(IRInstr):
+    def __init__(self, op:str):
+        self.op = op
+    def __str__(self):
+        return binsymbols[self.op]
 
-    
+        

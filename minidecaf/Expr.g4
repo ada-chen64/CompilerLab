@@ -16,25 +16,24 @@ statement
     : Return expression Semicolon #returnStmt
     ;
 expression
-    : unary
+    : add
+    ;
+add
+    : mult #addMult
+    | add ('+' | '-') mult #addOpMult
+    ;
+mult
+    : unary #multUnary
+    | mult (MulOp) unary #multOpUnary
     ;
 unary
     : atom #tUnary
     | ('-'|'!'|'~') unary #cUnary
     ;
-expr
-    : add
-    ;
-add
-    : add op=('+'|'-') mul
-    | mul
-    ;
-mul
-    : atom (mulOp atom)*
-    ;
 atom
-    : '(' expr ')'      # atomParen
-    | Integer         # atomInteger
+    : Integer         # atomInteger
+    | '(' expression ')'      # atomParen
     ;
-mulOp
-    : '*' | '/' ;
+MulOp
+    : '*' | '/' | '%';
+

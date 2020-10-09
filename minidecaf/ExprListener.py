@@ -53,6 +53,42 @@ class ExprListener(ParseTreeListener):
         pass
 
 
+    # Enter a parse tree produced by ExprParser#addOpMult.
+    def enterAddOpMult(self, ctx:ExprParser.AddOpMultContext):
+        pass
+
+    # Exit a parse tree produced by ExprParser#addOpMult.
+    def exitAddOpMult(self, ctx:ExprParser.AddOpMultContext):
+        pass
+
+
+    # Enter a parse tree produced by ExprParser#addMult.
+    def enterAddMult(self, ctx:ExprParser.AddMultContext):
+        pass
+
+    # Exit a parse tree produced by ExprParser#addMult.
+    def exitAddMult(self, ctx:ExprParser.AddMultContext):
+        pass
+
+
+    # Enter a parse tree produced by ExprParser#multOpUnary.
+    def enterMultOpUnary(self, ctx:ExprParser.MultOpUnaryContext):
+        pass
+
+    # Exit a parse tree produced by ExprParser#multOpUnary.
+    def exitMultOpUnary(self, ctx:ExprParser.MultOpUnaryContext):
+        pass
+
+
+    # Enter a parse tree produced by ExprParser#multUnary.
+    def enterMultUnary(self, ctx:ExprParser.MultUnaryContext):
+        pass
+
+    # Exit a parse tree produced by ExprParser#multUnary.
+    def exitMultUnary(self, ctx:ExprParser.MultUnaryContext):
+        pass
+
+
     # Enter a parse tree produced by ExprParser#tUnary.
     def enterTUnary(self, ctx:ExprParser.TUnaryContext):
         pass
@@ -71,42 +107,6 @@ class ExprListener(ParseTreeListener):
         pass
 
 
-    # Enter a parse tree produced by ExprParser#expr.
-    def enterExpr(self, ctx:ExprParser.ExprContext):
-        pass
-
-    # Exit a parse tree produced by ExprParser#expr.
-    def exitExpr(self, ctx:ExprParser.ExprContext):
-        pass
-
-
-    # Enter a parse tree produced by ExprParser#add.
-    def enterAdd(self, ctx:ExprParser.AddContext):
-        pass
-
-    # Exit a parse tree produced by ExprParser#add.
-    def exitAdd(self, ctx:ExprParser.AddContext):
-        pass
-
-
-    # Enter a parse tree produced by ExprParser#mul.
-    def enterMul(self, ctx:ExprParser.MulContext):
-        pass
-
-    # Exit a parse tree produced by ExprParser#mul.
-    def exitMul(self, ctx:ExprParser.MulContext):
-        pass
-
-
-    # Enter a parse tree produced by ExprParser#atomParen.
-    def enterAtomParen(self, ctx:ExprParser.AtomParenContext):
-        pass
-
-    # Exit a parse tree produced by ExprParser#atomParen.
-    def exitAtomParen(self, ctx:ExprParser.AtomParenContext):
-        pass
-
-
     # Enter a parse tree produced by ExprParser#atomInteger.
     def enterAtomInteger(self, ctx:ExprParser.AtomIntegerContext):
         pass
@@ -116,12 +116,12 @@ class ExprListener(ParseTreeListener):
         pass
 
 
-    # Enter a parse tree produced by ExprParser#mulOp.
-    def enterMulOp(self, ctx:ExprParser.MulOpContext):
+    # Enter a parse tree produced by ExprParser#atomParen.
+    def enterAtomParen(self, ctx:ExprParser.AtomParenContext):
         pass
 
-    # Exit a parse tree produced by ExprParser#mulOp.
-    def exitMulOp(self, ctx:ExprParser.MulOpContext):
+    # Exit a parse tree produced by ExprParser#atomParen.
+    def exitAtomParen(self, ctx:ExprParser.AtomParenContext):
         pass
 
 
