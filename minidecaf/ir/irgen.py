@@ -5,7 +5,6 @@ from ..utils import *
 from ..ExprParser import ExprParser
 from ..ExprVisitor import ExprVisitor
 
-
 class StackIRGen(ExprVisitor):
     def __init__(self, emitter:IREmitter):
         self._E = emitter
@@ -51,3 +50,20 @@ class StackIRGen(ExprVisitor):
         op = text(ctx.MulOp())
         self._E(instr.Binaries(op))
         #print(op)
+    
+    def visitTLog_or(self, ctx:ExprParser.TLog_orContext):
+        self.visitChildren(ctx)
+        op = text(ctx.LOr())
+        self._E(instr.Logical(op))
+    def visitTLog_and(self, ctx:ExprParser.TLog_andContext):
+        self.visitChildren(ctx)
+        op = text(ctx.Land())
+        self._E(instr.Logical(op))
+    def visitTEquality(self, ctx:ExprParser.TEqualityContext):
+        self.visitChildren(ctx)
+        op = text(ctx.EqOp())
+        self._E(instr.Equalities(op))
+    def visitTRelational(self, ctx:ExprParser.TRelationalContext):
+        self.visitChildren(ctx)
+        op = text(ctx.InEqOp())
+        self._E(instr.Relational(op))

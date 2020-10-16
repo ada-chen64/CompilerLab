@@ -4,7 +4,8 @@ from ..ir.instr import *
 from ..utils import *
 from . import *
 
-
+equalinstr = {'==' : 'seqz' , '!=' : 'snez'}
+relateinstr = {'<' : 'slt', '>' : 'sgt'}
 def Instrs(f):
     def g(*args, **kwargs):
         instrs = f(*args, *kwargs)
@@ -49,6 +50,30 @@ def binary(op):
     return pop("t1", "t2") + [f"{inst} t1, t2, t1"] + push("t1")
     #print(inst)
 
+@Instrs
+def equality(op):
+    inst = equalinstr[op]
+    
+    return pop("t1", "t2") + [f"sub t1, t2, t1", f"{inst} t1, t1"] + push("t1")
+    
+
+@Instrs
+def relation(op):
+    if(op == '<') or (op == '>'):
+        inst = relateinstr[op]
+        return pop("t1", "t2") + [f"{inst} t1, t2, t1"] + push("t1")
+    if(op == '<='):
+        return relation('>') + LNot("t1")
+    if(op == '>='):
+        return relation('<') + LNot("t1")
+@Instrs
+def logical(op):
+    inst = logicsymbols[op]
+    if(inst == 'land'):
+        return pop("t1", "t2") + [f"snez t1, t1", f"snez t2, t2", f"and t1, t2, t1"] + push("t1")
+    elif(inst == 'lor'):
+        return pop("t1", "t2") + [f"or t1, t2, t1", f"snez t1, t1"] + push("t1")
+
 class RISCVAsmGen:
     def __init__(self, emitter):
         self._E = emitter
@@ -70,6 +95,15 @@ class RISCVAsmGen:
     def genBinary(self, instr:Binaries):
         self._E(binary(instr.op))
     
+    def genEqualities(self, instr:Equalities):
+        self._E(equality(instr.op))
+    
+    def genRelational(self, instr:Relational):
+        self._E(relation(instr.op))
+    
+    def genLogical(self, instr:Logical):
+        self._E(logical(instr.op))
+
     def gen(self, ir):
         self._E([
             AsmDirective(".text"),
@@ -81,5 +115,8 @@ class RISCVAsmGen:
         self._E([
             AsmInstr("jr ra")])
 
-_g = { Ret: RISCVAsmGen.genRet, Const: RISCVAsmGen.genConst, LNOT: RISCVAsmGen.genLNot, Not: RISCVAsmGen.genNot, Neg: RISCVAsmGen.genNeg, Binaries: RISCVAsmGen.genBinary}
+_g = { Ret: RISCVAsmGen.genRet, Const: RISCVAsmGen.genConst, \
+LNOT: RISCVAsmGen.genLNot, Not: RISCVAsmGen.genNot, Neg: RISCVAsmGen.genNeg, \
+Binaries: RISCVAsmGen.genBinary, Equalities: RISCVAsmGen.genEqualities, \
+Relational : RISCVAsmGen.genRelational, Logical: RISCVAsmGen.genLogical}
 

@@ -125,3 +125,75 @@ class ExprListener(ParseTreeListener):
         pass
 
 
+    # Enter a parse tree produced by ExprParser#cLog_or.
+    def enterCLog_or(self, ctx:ExprParser.CLog_orContext):
+        pass
+
+    # Exit a parse tree produced by ExprParser#cLog_or.
+    def exitCLog_or(self, ctx:ExprParser.CLog_orContext):
+        pass
+
+
+    # Enter a parse tree produced by ExprParser#tLog_or.
+    def enterTLog_or(self, ctx:ExprParser.TLog_orContext):
+        pass
+
+    # Exit a parse tree produced by ExprParser#tLog_or.
+    def exitTLog_or(self, ctx:ExprParser.TLog_orContext):
+        pass
+
+
+    # Enter a parse tree produced by ExprParser#cLog_and.
+    def enterCLog_and(self, ctx:ExprParser.CLog_andContext):
+        pass
+
+    # Exit a parse tree produced by ExprParser#cLog_and.
+    def exitCLog_and(self, ctx:ExprParser.CLog_andContext):
+        pass
+
+
+    # Enter a parse tree produced by ExprParser#tLog_and.
+    def enterTLog_and(self, ctx:ExprParser.TLog_andContext):
+        pass
+
+    # Exit a parse tree produced by ExprParser#tLog_and.
+    def exitTLog_and(self, ctx:ExprParser.TLog_andContext):
+        pass
+
+
+    # Enter a parse tree produced by ExprParser#cEquality.
+    def enterCEquality(self, ctx:ExprParser.CEqualityContext):
+        pass
+
+    # Exit a parse tree produced by ExprParser#cEquality.
+    def exitCEquality(self, ctx:ExprParser.CEqualityContext):
+        pass
+
+
+    # Enter a parse tree produced by ExprParser#tEquality.
+    def enterTEquality(self, ctx:ExprParser.TEqualityContext):
+        pass
+
+    # Exit a parse tree produced by ExprParser#tEquality.
+    def exitTEquality(self, ctx:ExprParser.TEqualityContext):
+        pass
+
+
+    # Enter a parse tree produced by ExprParser#cRelational.
+    def enterCRelational(self, ctx:ExprParser.CRelationalContext):
+        pass
+
+    # Exit a parse tree produced by ExprParser#cRelational.
+    def exitCRelational(self, ctx:ExprParser.CRelationalContext):
+        pass
+
+
+    # Enter a parse tree produced by ExprParser#tRelational.
+    def enterTRelational(self, ctx:ExprParser.TRelationalContext):
+        pass
+
+    # Exit a parse tree produced by ExprParser#tRelational.
+    def exitTRelational(self, ctx:ExprParser.TRelationalContext):
+        pass
+
+

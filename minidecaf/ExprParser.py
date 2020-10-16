@@ -7,31 +7,46 @@ import sys
 
 def serializedATN():
     with StringIO() as buf:
-        buf.write("\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3\25")
-        buf.write("N\4\2\t\2\4\3\t\3\4\4\t\4\4\5\t\5\4\6\t\6\4\7\t\7\4\b")
-        buf.write("\t\b\4\t\t\t\4\n\t\n\3\2\6\2\26\n\2\r\2\16\2\27\3\2\3")
-        buf.write("\2\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\4\3\4\3\5\3\5\3\5")
-        buf.write("\3\5\3\6\3\6\3\7\3\7\3\7\3\7\3\7\3\7\7\7\62\n\7\f\7\16")
-        buf.write("\7\65\13\7\3\b\3\b\3\b\3\b\3\b\3\b\7\b=\n\b\f\b\16\b@")
-        buf.write("\13\b\3\t\3\t\3\t\5\tE\n\t\3\n\3\n\3\n\3\n\3\n\5\nL\n")
-        buf.write("\n\3\n\2\4\f\16\13\2\4\6\b\n\f\16\20\22\2\4\3\2\t\n\4")
-        buf.write("\2\n\n\16\17\2I\2\25\3\2\2\2\4\33\3\2\2\2\6#\3\2\2\2\b")
-        buf.write("%\3\2\2\2\n)\3\2\2\2\f+\3\2\2\2\16\66\3\2\2\2\20D\3\2")
-        buf.write("\2\2\22K\3\2\2\2\24\26\5\4\3\2\25\24\3\2\2\2\26\27\3\2")
-        buf.write("\2\2\27\25\3\2\2\2\27\30\3\2\2\2\30\31\3\2\2\2\31\32\7")
-        buf.write("\2\2\3\32\3\3\2\2\2\33\34\5\6\4\2\34\35\7\24\2\2\35\36")
-        buf.write("\7\4\2\2\36\37\7\5\2\2\37 \7\6\2\2 !\5\b\5\2!\"\7\7\2")
-        buf.write("\2\"\5\3\2\2\2#$\7\22\2\2$\7\3\2\2\2%&\7\23\2\2&\'\5\n")
-        buf.write("\6\2\'(\7\b\2\2(\t\3\2\2\2)*\5\f\7\2*\13\3\2\2\2+,\b\7")
-        buf.write("\1\2,-\5\16\b\2-\63\3\2\2\2./\f\3\2\2/\60\t\2\2\2\60\62")
-        buf.write("\5\16\b\2\61.\3\2\2\2\62\65\3\2\2\2\63\61\3\2\2\2\63\64")
-        buf.write("\3\2\2\2\64\r\3\2\2\2\65\63\3\2\2\2\66\67\b\b\1\2\678")
-        buf.write("\5\20\t\28>\3\2\2\29:\f\3\2\2:;\7\3\2\2;=\5\20\t\2<9\3")
-        buf.write("\2\2\2=@\3\2\2\2><\3\2\2\2>?\3\2\2\2?\17\3\2\2\2@>\3\2")
-        buf.write("\2\2AE\5\22\n\2BC\t\3\2\2CE\5\20\t\2DA\3\2\2\2DB\3\2\2")
-        buf.write("\2E\21\3\2\2\2FL\7\20\2\2GH\7\4\2\2HI\5\n\6\2IJ\7\5\2")
-        buf.write("\2JL\3\2\2\2KF\3\2\2\2KG\3\2\2\2L\23\3\2\2\2\7\27\63>")
-        buf.write("DK")
+        buf.write("\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3\31")
+        buf.write("\u0082\4\2\t\2\4\3\t\3\4\4\t\4\4\5\t\5\4\6\t\6\4\7\t\7")
+        buf.write("\4\b\t\b\4\t\t\t\4\n\t\n\4\13\t\13\4\f\t\f\4\r\t\r\4\16")
+        buf.write("\t\16\3\2\6\2\36\n\2\r\2\16\2\37\3\2\3\2\3\3\3\3\3\3\3")
+        buf.write("\3\3\3\3\3\3\3\3\3\3\4\3\4\3\5\3\5\3\5\3\5\3\6\3\6\3\7")
+        buf.write("\3\7\3\7\3\7\3\7\3\7\7\7:\n\7\f\7\16\7=\13\7\3\b\3\b\3")
+        buf.write("\b\3\b\3\b\3\b\7\bE\n\b\f\b\16\bH\13\b\3\t\3\t\3\t\5\t")
+        buf.write("M\n\t\3\n\3\n\3\n\3\n\3\n\5\nT\n\n\3\13\3\13\3\13\3\13")
+        buf.write("\3\13\3\13\7\13\\\n\13\f\13\16\13_\13\13\3\f\3\f\3\f\3")
+        buf.write("\f\3\f\3\f\7\fg\n\f\f\f\16\fj\13\f\3\r\3\r\3\r\3\r\3\r")
+        buf.write("\3\r\7\rr\n\r\f\r\16\ru\13\r\3\16\3\16\3\16\3\16\3\16")
+        buf.write("\3\16\7\16}\n\16\f\16\16\16\u0080\13\16\3\16\2\b\f\16")
+        buf.write("\24\26\30\32\17\2\4\6\b\n\f\16\20\22\24\26\30\32\2\4\3")
+        buf.write("\2\13\f\4\2\f\f\20\21\2}\2\35\3\2\2\2\4#\3\2\2\2\6+\3")
+        buf.write("\2\2\2\b-\3\2\2\2\n\61\3\2\2\2\f\63\3\2\2\2\16>\3\2\2")
+        buf.write("\2\20L\3\2\2\2\22S\3\2\2\2\24U\3\2\2\2\26`\3\2\2\2\30")
+        buf.write("k\3\2\2\2\32v\3\2\2\2\34\36\5\4\3\2\35\34\3\2\2\2\36\37")
+        buf.write("\3\2\2\2\37\35\3\2\2\2\37 \3\2\2\2 !\3\2\2\2!\"\7\2\2")
+        buf.write("\3\"\3\3\2\2\2#$\5\6\4\2$%\7\30\2\2%&\7\6\2\2&\'\7\7\2")
+        buf.write("\2\'(\7\b\2\2()\5\b\5\2)*\7\t\2\2*\5\3\2\2\2+,\7\26\2")
+        buf.write("\2,\7\3\2\2\2-.\7\27\2\2./\5\n\6\2/\60\7\n\2\2\60\t\3")
+        buf.write("\2\2\2\61\62\5\24\13\2\62\13\3\2\2\2\63\64\b\7\1\2\64")
+        buf.write("\65\5\16\b\2\65;\3\2\2\2\66\67\f\3\2\2\678\t\2\2\28:\5")
+        buf.write("\16\b\29\66\3\2\2\2:=\3\2\2\2;9\3\2\2\2;<\3\2\2\2<\r\3")
+        buf.write("\2\2\2=;\3\2\2\2>?\b\b\1\2?@\5\20\t\2@F\3\2\2\2AB\f\3")
+        buf.write("\2\2BC\7\3\2\2CE\5\20\t\2DA\3\2\2\2EH\3\2\2\2FD\3\2\2")
+        buf.write("\2FG\3\2\2\2G\17\3\2\2\2HF\3\2\2\2IM\5\22\n\2JK\t\3\2")
+        buf.write("\2KM\5\20\t\2LI\3\2\2\2LJ\3\2\2\2M\21\3\2\2\2NT\7\24\2")
+        buf.write("\2OP\7\6\2\2PQ\5\n\6\2QR\7\7\2\2RT\3\2\2\2SN\3\2\2\2S")
+        buf.write("O\3\2\2\2T\23\3\2\2\2UV\b\13\1\2VW\5\26\f\2W]\3\2\2\2")
+        buf.write("XY\f\3\2\2YZ\7\22\2\2Z\\\5\26\f\2[X\3\2\2\2\\_\3\2\2\2")
+        buf.write("][\3\2\2\2]^\3\2\2\2^\25\3\2\2\2_]\3\2\2\2`a\b\f\1\2a")
+        buf.write("b\5\30\r\2bh\3\2\2\2cd\f\3\2\2de\7\23\2\2eg\5\30\r\2f")
+        buf.write("c\3\2\2\2gj\3\2\2\2hf\3\2\2\2hi\3\2\2\2i\27\3\2\2\2jh")
+        buf.write("\3\2\2\2kl\b\r\1\2lm\5\32\16\2ms\3\2\2\2no\f\3\2\2op\7")
+        buf.write("\4\2\2pr\5\32\16\2qn\3\2\2\2ru\3\2\2\2sq\3\2\2\2st\3\2")
+        buf.write("\2\2t\31\3\2\2\2us\3\2\2\2vw\b\16\1\2wx\5\f\7\2x~\3\2")
+        buf.write("\2\2yz\f\3\2\2z{\7\5\2\2{}\5\f\7\2|y\3\2\2\2}\u0080\3")
+        buf.write("\2\2\2~|\3\2\2\2~\177\3\2\2\2\177\33\3\2\2\2\u0080~\3")
+        buf.write("\2\2\2\13\37;FLS]hs~")
         return buf.getvalue()
 
 
@@ -45,15 +60,16 @@ class ExprParser ( Parser ):
 
     sharedContextCache = PredictionContextCache()
 
-    literalNames = [ "<INVALID>", "<INVALID>", "'('", "')'", "'{'", "'}'", 
-                     "';'", "'+'", "'-'", "'*'", "'/'", "'%'", "'!'", "'~'", 
-                     "<INVALID>", "<INVALID>", "'int'", "'return'", "<INVALID>", 
-                     "'.'" ]
+    literalNames = [ "<INVALID>", "<INVALID>", "<INVALID>", "<INVALID>", 
+                     "'('", "')'", "'{'", "'}'", "';'", "'+'", "'-'", "'*'", 
+                     "'/'", "'%'", "'!'", "'~'", "'||'", "'&&'", "<INVALID>", 
+                     "<INVALID>", "'int'", "'return'", "<INVALID>", "'.'" ]
 
-    symbolicNames = [ "<INVALID>", "MulOp", "Lparen", "Rparen", "Lbrace", 
-                      "Rbrace", "Semicolon", "Add", "Sub", "Mul", "Div", 
-                      "Mod", "LNot", "Not", "Integer", "Whitespace", "Int", 
-                      "Return", "Identifier", "Error" ]
+    symbolicNames = [ "<INVALID>", "MulOp", "EqOp", "InEqOp", "Lparen", 
+                      "Rparen", "Lbrace", "Rbrace", "Semicolon", "Add", 
+                      "Sub", "Mul", "Div", "Mod", "LNot", "Not", "LOr", 
+                      "Land", "Integer", "Whitespace", "Int", "Return", 
+                      "Identifier", "Error" ]
 
     RULE_program = 0
     RULE_function = 1
@@ -64,30 +80,39 @@ class ExprParser ( Parser ):
     RULE_mult = 6
     RULE_unary = 7
     RULE_atom = 8
+    RULE_logical_or = 9
+    RULE_logical_and = 10
+    RULE_equality = 11
+    RULE_relational = 12
 
     ruleNames =  [ "program", "function", "typ", "statement", "expression", 
-                   "add", "mult", "unary", "atom" ]
+                   "add", "mult", "unary", "atom", "logical_or", "logical_and", 
+                   "equality", "relational" ]
 
     EOF = Token.EOF
     MulOp=1
-    Lparen=2
-    Rparen=3
-    Lbrace=4
-    Rbrace=5
-    Semicolon=6
-    Add=7
-    Sub=8
-    Mul=9
-    Div=10
-    Mod=11
-    LNot=12
-    Not=13
-    Integer=14
-    Whitespace=15
-    Int=16
-    Return=17
-    Identifier=18
-    Error=19
+    EqOp=2
+    InEqOp=3
+    Lparen=4
+    Rparen=5
+    Lbrace=6
+    Rbrace=7
+    Semicolon=8
+    Add=9
+    Sub=10
+    Mul=11
+    Div=12
+    Mod=13
+    LNot=14
+    Not=15
+    LOr=16
+    Land=17
+    Integer=18
+    Whitespace=19
+    Int=20
+    Return=21
+    Identifier=22
+    Error=23
 
     def __init__(self, input:TokenStream, output:TextIO = sys.stdout):
         super().__init__(input, output)
@@ -140,19 +165,19 @@ class ExprParser ( Parser ):
         self._la = 0 # Token type
         try:
             self.enterOuterAlt(localctx, 1)
-            self.state = 19 
+            self.state = 27 
             self._errHandler.sync(self)
             _la = self._input.LA(1)
             while True:
-                self.state = 18
+                self.state = 26
                 self.function()
-                self.state = 21 
+                self.state = 29 
                 self._errHandler.sync(self)
                 _la = self._input.LA(1)
                 if not (_la==ExprParser.Int):
                     break
 
-            self.state = 23
+            self.state = 31
             self.match(ExprParser.EOF)
         except RecognitionException as re:
             localctx.exception = re
@@ -217,19 +242,19 @@ class ExprParser ( Parser ):
         self.enterRule(localctx, 2, self.RULE_function)
         try:
             self.enterOuterAlt(localctx, 1)
-            self.state = 25
+            self.state = 33
             self.typ()
-            self.state = 26
+            self.state = 34
             self.match(ExprParser.Identifier)
-            self.state = 27
+            self.state = 35
             self.match(ExprParser.Lparen)
-            self.state = 28
+            self.state = 36
             self.match(ExprParser.Rparen)
-            self.state = 29
+            self.state = 37
             self.match(ExprParser.Lbrace)
-            self.state = 30
+            self.state = 38
             self.statement()
-            self.state = 31
+            self.state = 39
             self.match(ExprParser.Rbrace)
         except RecognitionException as re:
             localctx.exception = re
@@ -287,7 +312,7 @@ class ExprParser ( Parser ):
         try:
             localctx = ExprParser.IntTypeContext(self, localctx)
             self.enterOuterAlt(localctx, 1)
-            self.state = 33
+            self.state = 41
             self.match(ExprParser.Int)
         except RecognitionException as re:
             localctx.exception = re
@@ -350,11 +375,11 @@ class ExprParser ( Parser ):
         try:
             localctx = ExprParser.ReturnStmtContext(self, localctx)
             self.enterOuterAlt(localctx, 1)
-            self.state = 35
+            self.state = 43
             self.match(ExprParser.Return)
-            self.state = 36
+            self.state = 44
             self.expression()
-            self.state = 37
+            self.state = 45
             self.match(ExprParser.Semicolon)
         except RecognitionException as re:
             localctx.exception = re
@@ -370,8 +395,8 @@ class ExprParser ( Parser ):
             super().__init__(parent, invokingState)
             self.parser = parser
 
-        def add(self):
-            return self.getTypedRuleContext(ExprParser.AddContext,0)
+        def logical_or(self):
+            return self.getTypedRuleContext(ExprParser.Logical_orContext,0)
 
 
         def getRuleIndex(self):
@@ -400,8 +425,8 @@ class ExprParser ( Parser ):
         self.enterRule(localctx, 8, self.RULE_expression)
         try:
             self.enterOuterAlt(localctx, 1)
-            self.state = 39
-            self.add(0)
+            self.state = 47
+            self.logical_or(0)
         except RecognitionException as re:
             localctx.exception = re
             self._errHandler.reportError(self, re)
@@ -497,10 +522,10 @@ class ExprParser ( Parser ):
             self._ctx = localctx
             _prevctx = localctx
 
-            self.state = 42
+            self.state = 50
             self.mult(0)
             self._ctx.stop = self._input.LT(-1)
-            self.state = 49
+            self.state = 57
             self._errHandler.sync(self)
             _alt = self._interp.adaptivePredict(self._input,1,self._ctx)
             while _alt!=2 and _alt!=ATN.INVALID_ALT_NUMBER:
@@ -510,20 +535,20 @@ class ExprParser ( Parser ):
                     _prevctx = localctx
                     localctx = ExprParser.AddOpMultContext(self, ExprParser.AddContext(self, _parentctx, _parentState))
                     self.pushNewRecursionContext(localctx, _startState, self.RULE_add)
-                    self.state = 44
+                    self.state = 52
                     if not self.precpred(self._ctx, 1):
                         from antlr4.error.Errors import FailedPredicateException
                         raise FailedPredicateException(self, "self.precpred(self._ctx, 1)")
-                    self.state = 45
+                    self.state = 53
                     _la = self._input.LA(1)
                     if not(_la==ExprParser.Add or _la==ExprParser.Sub):
                         self._errHandler.recoverInline(self)
                     else:
                         self._errHandler.reportMatch(self)
                         self.consume()
-                    self.state = 46
+                    self.state = 54
                     self.mult(0) 
-                self.state = 51
+                self.state = 59
                 self._errHandler.sync(self)
                 _alt = self._interp.adaptivePredict(self._input,1,self._ctx)
 
@@ -619,10 +644,10 @@ class ExprParser ( Parser ):
             self._ctx = localctx
             _prevctx = localctx
 
-            self.state = 53
+            self.state = 61
             self.unary()
             self._ctx.stop = self._input.LT(-1)
-            self.state = 60
+            self.state = 68
             self._errHandler.sync(self)
             _alt = self._interp.adaptivePredict(self._input,2,self._ctx)
             while _alt!=2 and _alt!=ATN.INVALID_ALT_NUMBER:
@@ -632,16 +657,16 @@ class ExprParser ( Parser ):
                     _prevctx = localctx
                     localctx = ExprParser.MultOpUnaryContext(self, ExprParser.MultContext(self, _parentctx, _parentState))
                     self.pushNewRecursionContext(localctx, _startState, self.RULE_mult)
-                    self.state = 55
+                    self.state = 63
                     if not self.precpred(self._ctx, 1):
                         from antlr4.error.Errors import FailedPredicateException
                         raise FailedPredicateException(self, "self.precpred(self._ctx, 1)")
 
-                    self.state = 56
+                    self.state = 64
                     self.match(ExprParser.MulOp)
-                    self.state = 57
+                    self.state = 65
                     self.unary() 
-                self.state = 62
+                self.state = 70
                 self._errHandler.sync(self)
                 _alt = self._interp.adaptivePredict(self._input,2,self._ctx)
 
@@ -732,26 +757,26 @@ class ExprParser ( Parser ):
         self.enterRule(localctx, 14, self.RULE_unary)
         self._la = 0 # Token type
         try:
-            self.state = 66
+            self.state = 74
             self._errHandler.sync(self)
             token = self._input.LA(1)
             if token in [ExprParser.Lparen, ExprParser.Integer]:
                 localctx = ExprParser.TUnaryContext(self, localctx)
                 self.enterOuterAlt(localctx, 1)
-                self.state = 63
+                self.state = 71
                 self.atom()
                 pass
             elif token in [ExprParser.Sub, ExprParser.LNot, ExprParser.Not]:
                 localctx = ExprParser.CUnaryContext(self, localctx)
                 self.enterOuterAlt(localctx, 2)
-                self.state = 64
+                self.state = 72
                 _la = self._input.LA(1)
                 if not((((_la) & ~0x3f) == 0 and ((1 << _la) & ((1 << ExprParser.Sub) | (1 << ExprParser.LNot) | (1 << ExprParser.Not))) != 0)):
                     self._errHandler.recoverInline(self)
                 else:
                     self._errHandler.reportMatch(self)
                     self.consume()
-                self.state = 65
+                self.state = 73
                 self.unary()
                 pass
             else:
@@ -840,23 +865,23 @@ class ExprParser ( Parser ):
         localctx = ExprParser.AtomContext(self, self._ctx, self.state)
         self.enterRule(localctx, 16, self.RULE_atom)
         try:
-            self.state = 73
+            self.state = 81
             self._errHandler.sync(self)
             token = self._input.LA(1)
             if token in [ExprParser.Integer]:
                 localctx = ExprParser.AtomIntegerContext(self, localctx)
                 self.enterOuterAlt(localctx, 1)
-                self.state = 68
+                self.state = 76
                 self.match(ExprParser.Integer)
                 pass
             elif token in [ExprParser.Lparen]:
                 localctx = ExprParser.AtomParenContext(self, localctx)
                 self.enterOuterAlt(localctx, 2)
-                self.state = 69
+                self.state = 77
                 self.match(ExprParser.Lparen)
-                self.state = 70
+                self.state = 78
                 self.expression()
-                self.state = 71
+                self.state = 79
                 self.match(ExprParser.Rparen)
                 pass
             else:
@@ -870,6 +895,476 @@ class ExprParser ( Parser ):
             self.exitRule()
         return localctx
 
+    class Logical_orContext(ParserRuleContext):
+
+        def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
+            super().__init__(parent, invokingState)
+            self.parser = parser
+
+
+        def getRuleIndex(self):
+            return ExprParser.RULE_logical_or
+
+     
+        def copyFrom(self, ctx:ParserRuleContext):
+            super().copyFrom(ctx)
+
+
+    class CLog_orContext(Logical_orContext):
+
+        def __init__(self, parser, ctx:ParserRuleContext): # actually a ExprParser.Logical_orContext
+            super().__init__(parser)
+            self.copyFrom(ctx)
+
+        def logical_and(self):
+            return self.getTypedRuleContext(ExprParser.Logical_andContext,0)
+
+
+        def enterRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "enterCLog_or" ):
+                listener.enterCLog_or(self)
+
+        def exitRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "exitCLog_or" ):
+                listener.exitCLog_or(self)
+
+        def accept(self, visitor:ParseTreeVisitor):
+            if hasattr( visitor, "visitCLog_or" ):
+                return visitor.visitCLog_or(self)
+            else:
+                return visitor.visitChildren(self)
+
+
+    class TLog_orContext(Logical_orContext):
+
+        def __init__(self, parser, ctx:ParserRuleContext): # actually a ExprParser.Logical_orContext
+            super().__init__(parser)
+            self.copyFrom(ctx)
+
+        def logical_or(self):
+            return self.getTypedRuleContext(ExprParser.Logical_orContext,0)
+
+        def LOr(self):
+            return self.getToken(ExprParser.LOr, 0)
+        def logical_and(self):
+            return self.getTypedRuleContext(ExprParser.Logical_andContext,0)
+
+
+        def enterRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "enterTLog_or" ):
+                listener.enterTLog_or(self)
+
+        def exitRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "exitTLog_or" ):
+                listener.exitTLog_or(self)
+
+        def accept(self, visitor:ParseTreeVisitor):
+            if hasattr( visitor, "visitTLog_or" ):
+                return visitor.visitTLog_or(self)
+            else:
+                return visitor.visitChildren(self)
+
+
+
+    def logical_or(self, _p:int=0):
+        _parentctx = self._ctx
+        _parentState = self.state
+        localctx = ExprParser.Logical_orContext(self, self._ctx, _parentState)
+        _prevctx = localctx
+        _startState = 18
+        self.enterRecursionRule(localctx, 18, self.RULE_logical_or, _p)
+        try:
+            self.enterOuterAlt(localctx, 1)
+            localctx = ExprParser.CLog_orContext(self, localctx)
+            self._ctx = localctx
+            _prevctx = localctx
+
+            self.state = 84
+            self.logical_and(0)
+            self._ctx.stop = self._input.LT(-1)
+            self.state = 91
+            self._errHandler.sync(self)
+            _alt = self._interp.adaptivePredict(self._input,5,self._ctx)
+            while _alt!=2 and _alt!=ATN.INVALID_ALT_NUMBER:
+                if _alt==1:
+                    if self._parseListeners is not None:
+                        self.triggerExitRuleEvent()
+                    _prevctx = localctx
+                    localctx = ExprParser.TLog_orContext(self, ExprParser.Logical_orContext(self, _parentctx, _parentState))
+                    self.pushNewRecursionContext(localctx, _startState, self.RULE_logical_or)
+                    self.state = 86
+                    if not self.precpred(self._ctx, 1):
+                        from antlr4.error.Errors import FailedPredicateException
+                        raise FailedPredicateException(self, "self.precpred(self._ctx, 1)")
+                    self.state = 87
+                    self.match(ExprParser.LOr)
+                    self.state = 88
+                    self.logical_and(0) 
+                self.state = 93
+                self._errHandler.sync(self)
+                _alt = self._interp.adaptivePredict(self._input,5,self._ctx)
+
+        except RecognitionException as re:
+            localctx.exception = re
+            self._errHandler.reportError(self, re)
+            self._errHandler.recover(self, re)
+        finally:
+            self.unrollRecursionContexts(_parentctx)
+        return localctx
+
+    class Logical_andContext(ParserRuleContext):
+
+        def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
+            super().__init__(parent, invokingState)
+            self.parser = parser
+
+
+        def getRuleIndex(self):
+            return ExprParser.RULE_logical_and
+
+     
+        def copyFrom(self, ctx:ParserRuleContext):
+            super().copyFrom(ctx)
+
+
+    class CLog_andContext(Logical_andContext):
+
+        def __init__(self, parser, ctx:ParserRuleContext): # actually a ExprParser.Logical_andContext
+            super().__init__(parser)
+            self.copyFrom(ctx)
+
+        def equality(self):
+            return self.getTypedRuleContext(ExprParser.EqualityContext,0)
+
+
+        def enterRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "enterCLog_and" ):
+                listener.enterCLog_and(self)
+
+        def exitRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "exitCLog_and" ):
+                listener.exitCLog_and(self)
+
+        def accept(self, visitor:ParseTreeVisitor):
+            if hasattr( visitor, "visitCLog_and" ):
+                return visitor.visitCLog_and(self)
+            else:
+                return visitor.visitChildren(self)
+
+
+    class TLog_andContext(Logical_andContext):
+
+        def __init__(self, parser, ctx:ParserRuleContext): # actually a ExprParser.Logical_andContext
+            super().__init__(parser)
+            self.copyFrom(ctx)
+
+        def logical_and(self):
+            return self.getTypedRuleContext(ExprParser.Logical_andContext,0)
+
+        def Land(self):
+            return self.getToken(ExprParser.Land, 0)
+        def equality(self):
+            return self.getTypedRuleContext(ExprParser.EqualityContext,0)
+
+
+        def enterRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "enterTLog_and" ):
+                listener.enterTLog_and(self)
+
+        def exitRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "exitTLog_and" ):
+                listener.exitTLog_and(self)
+
+        def accept(self, visitor:ParseTreeVisitor):
+            if hasattr( visitor, "visitTLog_and" ):
+                return visitor.visitTLog_and(self)
+            else:
+                return visitor.visitChildren(self)
+
+
+
+    def logical_and(self, _p:int=0):
+        _parentctx = self._ctx
+        _parentState = self.state
+        localctx = ExprParser.Logical_andContext(self, self._ctx, _parentState)
+        _prevctx = localctx
+        _startState = 20
+        self.enterRecursionRule(localctx, 20, self.RULE_logical_and, _p)
+        try:
+            self.enterOuterAlt(localctx, 1)
+            localctx = ExprParser.CLog_andContext(self, localctx)
+            self._ctx = localctx
+            _prevctx = localctx
+
+            self.state = 95
+            self.equality(0)
+            self._ctx.stop = self._input.LT(-1)
+            self.state = 102
+            self._errHandler.sync(self)
+            _alt = self._interp.adaptivePredict(self._input,6,self._ctx)
+            while _alt!=2 and _alt!=ATN.INVALID_ALT_NUMBER:
+                if _alt==1:
+                    if self._parseListeners is not None:
+                        self.triggerExitRuleEvent()
+                    _prevctx = localctx
+                    localctx = ExprParser.TLog_andContext(self, ExprParser.Logical_andContext(self, _parentctx, _parentState))
+                    self.pushNewRecursionContext(localctx, _startState, self.RULE_logical_and)
+                    self.state = 97
+                    if not self.precpred(self._ctx, 1):
+                        from antlr4.error.Errors import FailedPredicateException
+                        raise FailedPredicateException(self, "self.precpred(self._ctx, 1)")
+                    self.state = 98
+                    self.match(ExprParser.Land)
+                    self.state = 99
+                    self.equality(0) 
+                self.state = 104
+                self._errHandler.sync(self)
+                _alt = self._interp.adaptivePredict(self._input,6,self._ctx)
+
+        except RecognitionException as re:
+            localctx.exception = re
+            self._errHandler.reportError(self, re)
+            self._errHandler.recover(self, re)
+        finally:
+            self.unrollRecursionContexts(_parentctx)
+        return localctx
+
+    class EqualityContext(ParserRuleContext):
+
+        def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
+            super().__init__(parent, invokingState)
+            self.parser = parser
+
+
+        def getRuleIndex(self):
+            return ExprParser.RULE_equality
+
+     
+        def copyFrom(self, ctx:ParserRuleContext):
+            super().copyFrom(ctx)
+
+
+    class CEqualityContext(EqualityContext):
+
+        def __init__(self, parser, ctx:ParserRuleContext): # actually a ExprParser.EqualityContext
+            super().__init__(parser)
+            self.copyFrom(ctx)
+
+        def relational(self):
+            return self.getTypedRuleContext(ExprParser.RelationalContext,0)
+
+
+        def enterRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "enterCEquality" ):
+                listener.enterCEquality(self)
+
+        def exitRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "exitCEquality" ):
+                listener.exitCEquality(self)
+
+        def accept(self, visitor:ParseTreeVisitor):
+            if hasattr( visitor, "visitCEquality" ):
+                return visitor.visitCEquality(self)
+            else:
+                return visitor.visitChildren(self)
+
+
+    class TEqualityContext(EqualityContext):
+
+        def __init__(self, parser, ctx:ParserRuleContext): # actually a ExprParser.EqualityContext
+            super().__init__(parser)
+            self.copyFrom(ctx)
+
+        def equality(self):
+            return self.getTypedRuleContext(ExprParser.EqualityContext,0)
+
+        def relational(self):
+            return self.getTypedRuleContext(ExprParser.RelationalContext,0)
+
+        def EqOp(self):
+            return self.getToken(ExprParser.EqOp, 0)
+
+        def enterRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "enterTEquality" ):
+                listener.enterTEquality(self)
+
+        def exitRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "exitTEquality" ):
+                listener.exitTEquality(self)
+
+        def accept(self, visitor:ParseTreeVisitor):
+            if hasattr( visitor, "visitTEquality" ):
+                return visitor.visitTEquality(self)
+            else:
+                return visitor.visitChildren(self)
+
+
+
+    def equality(self, _p:int=0):
+        _parentctx = self._ctx
+        _parentState = self.state
+        localctx = ExprParser.EqualityContext(self, self._ctx, _parentState)
+        _prevctx = localctx
+        _startState = 22
+        self.enterRecursionRule(localctx, 22, self.RULE_equality, _p)
+        try:
+            self.enterOuterAlt(localctx, 1)
+            localctx = ExprParser.CEqualityContext(self, localctx)
+            self._ctx = localctx
+            _prevctx = localctx
+
+            self.state = 106
+            self.relational(0)
+            self._ctx.stop = self._input.LT(-1)
+            self.state = 113
+            self._errHandler.sync(self)
+            _alt = self._interp.adaptivePredict(self._input,7,self._ctx)
+            while _alt!=2 and _alt!=ATN.INVALID_ALT_NUMBER:
+                if _alt==1:
+                    if self._parseListeners is not None:
+                        self.triggerExitRuleEvent()
+                    _prevctx = localctx
+                    localctx = ExprParser.TEqualityContext(self, ExprParser.EqualityContext(self, _parentctx, _parentState))
+                    self.pushNewRecursionContext(localctx, _startState, self.RULE_equality)
+                    self.state = 108
+                    if not self.precpred(self._ctx, 1):
+                        from antlr4.error.Errors import FailedPredicateException
+                        raise FailedPredicateException(self, "self.precpred(self._ctx, 1)")
+
+                    self.state = 109
+                    self.match(ExprParser.EqOp)
+                    self.state = 110
+                    self.relational(0) 
+                self.state = 115
+                self._errHandler.sync(self)
+                _alt = self._interp.adaptivePredict(self._input,7,self._ctx)
+
+        except RecognitionException as re:
+            localctx.exception = re
+            self._errHandler.reportError(self, re)
+            self._errHandler.recover(self, re)
+        finally:
+            self.unrollRecursionContexts(_parentctx)
+        return localctx
+
+    class RelationalContext(ParserRuleContext):
+
+        def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
+            super().__init__(parent, invokingState)
+            self.parser = parser
+
+
+        def getRuleIndex(self):
+            return ExprParser.RULE_relational
+
+     
+        def copyFrom(self, ctx:ParserRuleContext):
+            super().copyFrom(ctx)
+
+
+    class CRelationalContext(RelationalContext):
+
+        def __init__(self, parser, ctx:ParserRuleContext): # actually a ExprParser.RelationalContext
+            super().__init__(parser)
+            self.copyFrom(ctx)
+
+        def add(self):
+            return self.getTypedRuleContext(ExprParser.AddContext,0)
+
+
+        def enterRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "enterCRelational" ):
+                listener.enterCRelational(self)
+
+        def exitRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "exitCRelational" ):
+                listener.exitCRelational(self)
+
+        def accept(self, visitor:ParseTreeVisitor):
+            if hasattr( visitor, "visitCRelational" ):
+                return visitor.visitCRelational(self)
+            else:
+                return visitor.visitChildren(self)
+
+
+    class TRelationalContext(RelationalContext):
+
+        def __init__(self, parser, ctx:ParserRuleContext): # actually a ExprParser.RelationalContext
+            super().__init__(parser)
+            self.copyFrom(ctx)
+
+        def relational(self):
+            return self.getTypedRuleContext(ExprParser.RelationalContext,0)
+
+        def add(self):
+            return self.getTypedRuleContext(ExprParser.AddContext,0)
+
+        def InEqOp(self):
+            return self.getToken(ExprParser.InEqOp, 0)
+
+        def enterRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "enterTRelational" ):
+                listener.enterTRelational(self)
+
+        def exitRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "exitTRelational" ):
+                listener.exitTRelational(self)
+
+        def accept(self, visitor:ParseTreeVisitor):
+            if hasattr( visitor, "visitTRelational" ):
+                return visitor.visitTRelational(self)
+            else:
+                return visitor.visitChildren(self)
+
+
+
+    def relational(self, _p:int=0):
+        _parentctx = self._ctx
+        _parentState = self.state
+        localctx = ExprParser.RelationalContext(self, self._ctx, _parentState)
+        _prevctx = localctx
+        _startState = 24
+        self.enterRecursionRule(localctx, 24, self.RULE_relational, _p)
+        try:
+            self.enterOuterAlt(localctx, 1)
+            localctx = ExprParser.CRelationalContext(self, localctx)
+            self._ctx = localctx
+            _prevctx = localctx
+
+            self.state = 117
+            self.add(0)
+            self._ctx.stop = self._input.LT(-1)
+            self.state = 124
+            self._errHandler.sync(self)
+            _alt = self._interp.adaptivePredict(self._input,8,self._ctx)
+            while _alt!=2 and _alt!=ATN.INVALID_ALT_NUMBER:
+                if _alt==1:
+                    if self._parseListeners is not None:
+                        self.triggerExitRuleEvent()
+                    _prevctx = localctx
+                    localctx = ExprParser.TRelationalContext(self, ExprParser.RelationalContext(self, _parentctx, _parentState))
+                    self.pushNewRecursionContext(localctx, _startState, self.RULE_relational)
+                    self.state = 119
+                    if not self.precpred(self._ctx, 1):
+                        from antlr4.error.Errors import FailedPredicateException
+                        raise FailedPredicateException(self, "self.precpred(self._ctx, 1)")
+
+                    self.state = 120
+                    self.match(ExprParser.InEqOp)
+                    self.state = 121
+                    self.add(0) 
+                self.state = 126
+                self._errHandler.sync(self)
+                _alt = self._interp.adaptivePredict(self._input,8,self._ctx)
+
+        except RecognitionException as re:
+            localctx.exception = re
+            self._errHandler.reportError(self, re)
+            self._errHandler.recover(self, re)
+        finally:
+            self.unrollRecursionContexts(_parentctx)
+        return localctx
+
 
 
     def sempred(self, localctx:RuleContext, ruleIndex:int, predIndex:int):
@@ -877,6 +1372,10 @@ class ExprParser ( Parser ):
             self._predicates = dict()
         self._predicates[5] = self.add_sempred
         self._predicates[6] = self.mult_sempred
+        self._predicates[9] = self.logical_or_sempred
+        self._predicates[10] = self.logical_and_sempred
+        self._predicates[11] = self.equality_sempred
+        self._predicates[12] = self.relational_sempred
         pred = self._predicates.get(ruleIndex, None)
         if pred is None:
             raise Exception("No predicate with index:" + str(ruleIndex))
@@ -890,6 +1389,26 @@ class ExprParser ( Parser ):
 
     def mult_sempred(self, localctx:MultContext, predIndex:int):
             if predIndex == 1:
+                return self.precpred(self._ctx, 1)
+         
+
+    def logical_or_sempred(self, localctx:Logical_orContext, predIndex:int):
+            if predIndex == 2:
+                return self.precpred(self._ctx, 1)
+         
+
+    def logical_and_sempred(self, localctx:Logical_andContext, predIndex:int):
+            if predIndex == 3:
+                return self.precpred(self._ctx, 1)
+         
+
+    def equality_sempred(self, localctx:EqualityContext, predIndex:int):
+            if predIndex == 4:
+                return self.precpred(self._ctx, 1)
+         
+
+    def relational_sempred(self, localctx:RelationalContext, predIndex:int):
+            if predIndex == 5:
                 return self.precpred(self._ctx, 1)
          
 

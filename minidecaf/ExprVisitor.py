@@ -74,5 +74,45 @@ class ExprVisitor(ParseTreeVisitor):
         return self.visitChildren(ctx)
 
 
+    # Visit a parse tree produced by ExprParser#cLog_or.
+    def visitCLog_or(self, ctx:ExprParser.CLog_orContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by ExprParser#tLog_or.
+    def visitTLog_or(self, ctx:ExprParser.TLog_orContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by ExprParser#cLog_and.
+    def visitCLog_and(self, ctx:ExprParser.CLog_andContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by ExprParser#tLog_and.
+    def visitTLog_and(self, ctx:ExprParser.TLog_andContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by ExprParser#cEquality.
+    def visitCEquality(self, ctx:ExprParser.CEqualityContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by ExprParser#tEquality.
+    def visitTEquality(self, ctx:ExprParser.TEqualityContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by ExprParser#cRelational.
+    def visitCRelational(self, ctx:ExprParser.CRelationalContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by ExprParser#tRelational.
+    def visitTRelational(self, ctx:ExprParser.TRelationalContext):
+        return self.visitChildren(ctx)
+
+
 
 del ExprParser

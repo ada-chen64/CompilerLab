@@ -37,4 +37,23 @@ class Binaries(IRInstr):
     def __str__(self):
         return binsymbols[self.op]
 
+class Equalities(IRInstr):
+    def __init__(self, op:str):
+        self.op = op
+    def __str__(self):
+        return eqsymbols[self.op]
+
+class Relational(IRInstr):
+    def __init__(self, op:str):
+        self.op = op
+    def __str__(self):
+        return relatesymbols[self.op]
+
+class Logical(IRInstr):
+    def __init__(self, op:str):
+        self.op = op
+    def __str__(self):
+        return logicsymbols[self.op]
+
+
         

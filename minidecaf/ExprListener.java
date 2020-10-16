@@ -27,73 +27,229 @@ public interface ExprListener extends ParseTreeListener {
 	 */
 	void exitFunction(ExprParser.FunctionContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link ExprParser#kind}.
+	 * Enter a parse tree produced by the {@code intType}
+	 * labeled alternative in {@link ExprParser#typ}.
 	 * @param ctx the parse tree
 	 */
-	void enterKind(ExprParser.KindContext ctx);
+	void enterIntType(ExprParser.IntTypeContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link ExprParser#kind}.
+	 * Exit a parse tree produced by the {@code intType}
+	 * labeled alternative in {@link ExprParser#typ}.
 	 * @param ctx the parse tree
 	 */
-	void exitKind(ExprParser.KindContext ctx);
+	void exitIntType(ExprParser.IntTypeContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link ExprParser#statement}.
+	 * Enter a parse tree produced by the {@code returnStmt}
+	 * labeled alternative in {@link ExprParser#statement}.
 	 * @param ctx the parse tree
 	 */
-	void enterStatement(ExprParser.StatementContext ctx);
+	void enterReturnStmt(ExprParser.ReturnStmtContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link ExprParser#statement}.
+	 * Exit a parse tree produced by the {@code returnStmt}
+	 * labeled alternative in {@link ExprParser#statement}.
 	 * @param ctx the parse tree
 	 */
-	void exitStatement(ExprParser.StatementContext ctx);
+	void exitReturnStmt(ExprParser.ReturnStmtContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link ExprParser#expr}.
+	 * Enter a parse tree produced by {@link ExprParser#expression}.
 	 * @param ctx the parse tree
 	 */
-	void enterExpr(ExprParser.ExprContext ctx);
+	void enterExpression(ExprParser.ExpressionContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link ExprParser#expr}.
+	 * Exit a parse tree produced by {@link ExprParser#expression}.
 	 * @param ctx the parse tree
 	 */
-	void exitExpr(ExprParser.ExprContext ctx);
+	void exitExpression(ExprParser.ExpressionContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link ExprParser#add}.
+	 * Enter a parse tree produced by the {@code addOpMult}
+	 * labeled alternative in {@link ExprParser#add}.
 	 * @param ctx the parse tree
 	 */
-	void enterAdd(ExprParser.AddContext ctx);
+	void enterAddOpMult(ExprParser.AddOpMultContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link ExprParser#add}.
+	 * Exit a parse tree produced by the {@code addOpMult}
+	 * labeled alternative in {@link ExprParser#add}.
 	 * @param ctx the parse tree
 	 */
-	void exitAdd(ExprParser.AddContext ctx);
+	void exitAddOpMult(ExprParser.AddOpMultContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link ExprParser#mul}.
+	 * Enter a parse tree produced by the {@code addMult}
+	 * labeled alternative in {@link ExprParser#add}.
 	 * @param ctx the parse tree
 	 */
-	void enterMul(ExprParser.MulContext ctx);
+	void enterAddMult(ExprParser.AddMultContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link ExprParser#mul}.
+	 * Exit a parse tree produced by the {@code addMult}
+	 * labeled alternative in {@link ExprParser#add}.
 	 * @param ctx the parse tree
 	 */
-	void exitMul(ExprParser.MulContext ctx);
+	void exitAddMult(ExprParser.AddMultContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link ExprParser#atom}.
+	 * Enter a parse tree produced by the {@code multOpUnary}
+	 * labeled alternative in {@link ExprParser#mult}.
 	 * @param ctx the parse tree
 	 */
-	void enterAtom(ExprParser.AtomContext ctx);
+	void enterMultOpUnary(ExprParser.MultOpUnaryContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link ExprParser#atom}.
+	 * Exit a parse tree produced by the {@code multOpUnary}
+	 * labeled alternative in {@link ExprParser#mult}.
 	 * @param ctx the parse tree
 	 */
-	void exitAtom(ExprParser.AtomContext ctx);
+	void exitMultOpUnary(ExprParser.MultOpUnaryContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link ExprParser#mulOp}.
+	 * Enter a parse tree produced by the {@code multUnary}
+	 * labeled alternative in {@link ExprParser#mult}.
 	 * @param ctx the parse tree
 	 */
-	void enterMulOp(ExprParser.MulOpContext ctx);
+	void enterMultUnary(ExprParser.MultUnaryContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link ExprParser#mulOp}.
+	 * Exit a parse tree produced by the {@code multUnary}
+	 * labeled alternative in {@link ExprParser#mult}.
 	 * @param ctx the parse tree
 	 */
-	void exitMulOp(ExprParser.MulOpContext ctx);
+	void exitMultUnary(ExprParser.MultUnaryContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code tUnary}
+	 * labeled alternative in {@link ExprParser#unary}.
+	 * @param ctx the parse tree
+	 */
+	void enterTUnary(ExprParser.TUnaryContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code tUnary}
+	 * labeled alternative in {@link ExprParser#unary}.
+	 * @param ctx the parse tree
+	 */
+	void exitTUnary(ExprParser.TUnaryContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code cUnary}
+	 * labeled alternative in {@link ExprParser#unary}.
+	 * @param ctx the parse tree
+	 */
+	void enterCUnary(ExprParser.CUnaryContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code cUnary}
+	 * labeled alternative in {@link ExprParser#unary}.
+	 * @param ctx the parse tree
+	 */
+	void exitCUnary(ExprParser.CUnaryContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code atomInteger}
+	 * labeled alternative in {@link ExprParser#atom}.
+	 * @param ctx the parse tree
+	 */
+	void enterAtomInteger(ExprParser.AtomIntegerContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code atomInteger}
+	 * labeled alternative in {@link ExprParser#atom}.
+	 * @param ctx the parse tree
+	 */
+	void exitAtomInteger(ExprParser.AtomIntegerContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code atomParen}
+	 * labeled alternative in {@link ExprParser#atom}.
+	 * @param ctx the parse tree
+	 */
+	void enterAtomParen(ExprParser.AtomParenContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code atomParen}
+	 * labeled alternative in {@link ExprParser#atom}.
+	 * @param ctx the parse tree
+	 */
+	void exitAtomParen(ExprParser.AtomParenContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code cLog_or}
+	 * labeled alternative in {@link ExprParser#logical_or}.
+	 * @param ctx the parse tree
+	 */
+	void enterCLog_or(ExprParser.CLog_orContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code cLog_or}
+	 * labeled alternative in {@link ExprParser#logical_or}.
+	 * @param ctx the parse tree
+	 */
+	void exitCLog_or(ExprParser.CLog_orContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code tLog_or}
+	 * labeled alternative in {@link ExprParser#logical_or}.
+	 * @param ctx the parse tree
+	 */
+	void enterTLog_or(ExprParser.TLog_orContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code tLog_or}
+	 * labeled alternative in {@link ExprParser#logical_or}.
+	 * @param ctx the parse tree
+	 */
+	void exitTLog_or(ExprParser.TLog_orContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code cLog_and}
+	 * labeled alternative in {@link ExprParser#logical_and}.
+	 * @param ctx the parse tree
+	 */
+	void enterCLog_and(ExprParser.CLog_andContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code cLog_and}
+	 * labeled alternative in {@link ExprParser#logical_and}.
+	 * @param ctx the parse tree
+	 */
+	void exitCLog_and(ExprParser.CLog_andContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code tLog_and}
+	 * labeled alternative in {@link ExprParser#logical_and}.
+	 * @param ctx the parse tree
+	 */
+	void enterTLog_and(ExprParser.TLog_andContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code tLog_and}
+	 * labeled alternative in {@link ExprParser#logical_and}.
+	 * @param ctx the parse tree
+	 */
+	void exitTLog_and(ExprParser.TLog_andContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code cEquality}
+	 * labeled alternative in {@link ExprParser#equality}.
+	 * @param ctx the parse tree
+	 */
+	void enterCEquality(ExprParser.CEqualityContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code cEquality}
+	 * labeled alternative in {@link ExprParser#equality}.
+	 * @param ctx the parse tree
+	 */
+	void exitCEquality(ExprParser.CEqualityContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code tEquality}
+	 * labeled alternative in {@link ExprParser#equality}.
+	 * @param ctx the parse tree
+	 */
+	void enterTEquality(ExprParser.TEqualityContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code tEquality}
+	 * labeled alternative in {@link ExprParser#equality}.
+	 * @param ctx the parse tree
+	 */
+	void exitTEquality(ExprParser.TEqualityContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code cRelational}
+	 * labeled alternative in {@link ExprParser#relational}.
+	 * @param ctx the parse tree
+	 */
+	void enterCRelational(ExprParser.CRelationalContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code cRelational}
+	 * labeled alternative in {@link ExprParser#relational}.
+	 * @param ctx the parse tree
+	 */
+	void exitCRelational(ExprParser.CRelationalContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code tRelational}
+	 * labeled alternative in {@link ExprParser#relational}.
+	 * @param ctx the parse tree
+	 */
+	void enterTRelational(ExprParser.TRelationalContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code tRelational}
+	 * labeled alternative in {@link ExprParser#relational}.
+	 * @param ctx the parse tree
+	 */
+	void exitTRelational(ExprParser.TRelationalContext ctx);
 }

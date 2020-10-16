@@ -16,7 +16,7 @@ statement
     : Return expression Semicolon #returnStmt
     ;
 expression
-    : add
+    : logical_or
     ;
 add
     : mult #addMult
@@ -34,6 +34,27 @@ atom
     : Integer         # atomInteger
     | '(' expression ')'      # atomParen
     ;
+logical_or
+    : logical_and #cLog_or
+    | logical_or '||' logical_and #tLog_or
+    ;
+logical_and
+    : equality #cLog_and
+    | logical_and '&&' equality #tLog_and
+    ;
+equality
+    : relational #cEquality
+    | equality (EqOp) relational #tEquality
+    ;
+relational
+    : add #cRelational
+    | relational (InEqOp) add #tRelational
+    ;
 MulOp
     : '*' | '/' | '%';
+
+EqOp
+    : '==' | '!=' ;
+InEqOp 
+    : '<' | '>' |'<=' | '>=';
 

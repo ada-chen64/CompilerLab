@@ -17,6 +17,8 @@ Div: '/';
 Mod: '%';
 LNot: '!';
 Not: '~';
+LOr: '||';
+Land: '&&'; 
 
 // 整数
 Integer: [0-9]+;
