@@ -47,7 +47,8 @@ def main():
         #print(tree.toStringTree(recog=parser))
         # print(tree.accept(visitor))
         ir = irGenerator(tree)
-        
+        # for instr in ir.instrs:
+        #         print(type(instr))
         asm = asmGenerator(ir, "lmao.txt")
         print(asm)
         # print(ir)

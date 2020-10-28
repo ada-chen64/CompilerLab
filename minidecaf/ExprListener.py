@@ -44,12 +44,57 @@ class ExprListener(ParseTreeListener):
         pass
 
 
+    # Enter a parse tree produced by ExprParser#exprStmt.
+    def enterExprStmt(self, ctx:ExprParser.ExprStmtContext):
+        pass
+
+    # Exit a parse tree produced by ExprParser#exprStmt.
+    def exitExprStmt(self, ctx:ExprParser.ExprStmtContext):
+        pass
+
+
+    # Enter a parse tree produced by ExprParser#declarStmt.
+    def enterDeclarStmt(self, ctx:ExprParser.DeclarStmtContext):
+        pass
+
+    # Exit a parse tree produced by ExprParser#declarStmt.
+    def exitDeclarStmt(self, ctx:ExprParser.DeclarStmtContext):
+        pass
+
+
+    # Enter a parse tree produced by ExprParser#declaration.
+    def enterDeclaration(self, ctx:ExprParser.DeclarationContext):
+        pass
+
+    # Exit a parse tree produced by ExprParser#declaration.
+    def exitDeclaration(self, ctx:ExprParser.DeclarationContext):
+        pass
+
+
     # Enter a parse tree produced by ExprParser#expression.
     def enterExpression(self, ctx:ExprParser.ExpressionContext):
         pass
 
     # Exit a parse tree produced by ExprParser#expression.
     def exitExpression(self, ctx:ExprParser.ExpressionContext):
+        pass
+
+
+    # Enter a parse tree produced by ExprParser#cAssign.
+    def enterCAssign(self, ctx:ExprParser.CAssignContext):
+        pass
+
+    # Exit a parse tree produced by ExprParser#cAssign.
+    def exitCAssign(self, ctx:ExprParser.CAssignContext):
+        pass
+
+
+    # Enter a parse tree produced by ExprParser#tAssign.
+    def enterTAssign(self, ctx:ExprParser.TAssignContext):
+        pass
+
+    # Exit a parse tree produced by ExprParser#tAssign.
+    def exitTAssign(self, ctx:ExprParser.TAssignContext):
         pass
 
 
@@ -122,6 +167,15 @@ class ExprListener(ParseTreeListener):
 
     # Exit a parse tree produced by ExprParser#atomParen.
     def exitAtomParen(self, ctx:ExprParser.AtomParenContext):
+        pass
+
+
+    # Enter a parse tree produced by ExprParser#atomIdentifier.
+    def enterAtomIdentifier(self, ctx:ExprParser.AtomIdentifierContext):
+        pass
+
+    # Exit a parse tree produced by ExprParser#atomIdentifier.
+    def exitAtomIdentifier(self, ctx:ExprParser.AtomIdentifierContext):
         pass
 
 

@@ -1,0 +1,9 @@
+	.text
+	.globl main
+main:
+	addi sp, sp, -8
+	li t1, 100
+	sd t1, 0(sp)
+	ld a0, 0(sp)
+	addi sp, sp, 8
+	jr ra

@@ -28,6 +28,13 @@ def _pop(reg):
 def pop(*regs):
     return flatten(map(_pop, regs))
 
+@Instrs
+def load():
+    return pop("t1") + [f"lw t1, 0(t1)"] + push("t1")
+
+@Instrs
+def store():
+    return pop("t2", "t1") + [f"sw t1, 0(t2)"] + push("t1")
 
 @Instrs
 def neg(reg):
@@ -73,16 +80,26 @@ def logical(op):
         return pop("t1", "t2") + [f"snez t1, t1", f"snez t2, t2", f"and t1, t2, t1"] + push("t1")
     elif(inst == 'lor'):
         return pop("t1", "t2") + [f"or t1, t2, t1", f"snez t1, t1"] + push("t1")
+@Instrs
+def frameAddr(k):
+    return push("fp", k) + binary("+")
+
+@Instrs
+def ret(func:str):
+    return [f"beqz x0, {func}_epilogue"]
 
 class RISCVAsmGen:
     def __init__(self, emitter):
         self._E = emitter
 
     def genRet(self, instr:Ret):
-        self._E(pop("a0"))
+        self._E(ret("main"))
 
     def genConst(self, instr:Const):
         self._E(push(instr.v))
+    
+    def genPop(self, instr:Pop):
+        self._E(pop())
 
     def genNeg(self, instr:Neg):
         self._E(neg("t1"))
@@ -103,20 +120,50 @@ class RISCVAsmGen:
     
     def genLogical(self, instr:Logical):
         self._E(logical(instr.op))
-
-    def gen(self, ir):
+    
+    def genFrameAddr(self, instr:FrameAddr):
+        self._E(frameAddr(instr.offset))
+    
+    def genStore(self, instr: Store):
+        self._E(store())
+    
+    def genLoad(self, instr:Load):
+        self._E(load())
+    
+    def genPrologue(self, funcname:str):
         self._E([
+            AsmBlank(),
             AsmDirective(".text"),
-            AsmDirective(".globl main"),
-            AsmLabel("main")])
+            AsmDirective(f".globl {funcname}"),
+            AsmLabel(f"{funcname}")]) 
+        self._E(push("ra", "fp")) 
+        self._E([
+            AsmInstr("mv fp, sp"),
+            AsmComment("End Prologue"),
+            AsmBlank()])
+
+    def genEpilogue(self, funcname:str):
+        self._E([
+            AsmBlank(),
+            AsmComment("BEGIN EPOLOGUE")] +
+            push(0) + [
+            AsmLabel(f"{funcname}_epilogue"),
+            AsmInstr(f"lw a0, 0(sp)"),
+            AsmInstr(f"mv sp, fp")] +
+            pop("fp", "ra") + [
+            AsmInstr("jr ra")
+        ])
+    def gen(self, ir):
+        self.genPrologue("main")
         for instr in ir.instrs:
            # print(type(instr))
             _g[type(instr)](self, instr)
-        self._E([
-            AsmInstr("jr ra")])
+        self.genEpilogue("main")
 
 _g = { Ret: RISCVAsmGen.genRet, Const: RISCVAsmGen.genConst, \
 LNOT: RISCVAsmGen.genLNot, Not: RISCVAsmGen.genNot, Neg: RISCVAsmGen.genNeg, \
 Binaries: RISCVAsmGen.genBinary, Equalities: RISCVAsmGen.genEqualities, \
-Relational : RISCVAsmGen.genRelational, Logical: RISCVAsmGen.genLogical}
+Relational : RISCVAsmGen.genRelational, Logical: RISCVAsmGen.genLogical, \
+Pop: RISCVAsmGen.genPop, Store: RISCVAsmGen.genStore, Load: RISCVAsmGen.genLoad, \
+FrameAddr: RISCVAsmGen.genFrameAddr}
 

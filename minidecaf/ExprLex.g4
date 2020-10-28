@@ -8,7 +8,8 @@ Rbrace: '}';
 
 //符号
 Semicolon: ';';
-
+Ques: '?';
+Colon: ':';
 // 运算符
 Add: '+';
 Sub: '-';
@@ -19,6 +20,8 @@ LNot: '!';
 Not: '~';
 LOr: '||';
 Land: '&&'; 
+
+
 
 // 整数
 Integer: [0-9]+;
@@ -32,7 +35,9 @@ Int: 'int';
 Return: 'return';
 Identifier: [a-zA-Z_][a-zA-Z0-9_]*;
 
-
+//keywords
+If: 'if';
+Else: 'else';
 
 //错
 Error: '.';

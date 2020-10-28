@@ -54,6 +54,35 @@ class Logical(IRInstr):
         self.op = op
     def __str__(self):
         return logicsymbols[self.op]
+class FrameAddr(IRInstr):
+    def __init__(self, fpOffset:int):
+        assert fpOffset < 0
+        self.offset = fpOffset
+    def __str__(self):
+        return f"frameaddr {self.offset}"
 
+class Load(IRInstr):
+    def __str__(self):
+        return f"load"
 
-        
+class Store(IRInstr):
+    def __str__(self):
+        return f"store"
+
+class Pop(IRInstr):
+    def __str__(self):
+        return f"pop"
+
+class Branch(IRInstr):
+    def __init__(self, op:str, label:str):
+        assert op in branchOp
+        self.op = op
+        self.label = label
+    def __str__(self):
+        return f"{self.op} {self.label}"
+
+class Label(IRInstr):
+    def __init__(self, label:str):
+        self.label = label
+    def __str__(self):
+        return f"label {self.label}"

@@ -29,8 +29,33 @@ class ExprVisitor(ParseTreeVisitor):
         return self.visitChildren(ctx)
 
 
+    # Visit a parse tree produced by ExprParser#exprStmt.
+    def visitExprStmt(self, ctx:ExprParser.ExprStmtContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by ExprParser#declarStmt.
+    def visitDeclarStmt(self, ctx:ExprParser.DeclarStmtContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by ExprParser#declaration.
+    def visitDeclaration(self, ctx:ExprParser.DeclarationContext):
+        return self.visitChildren(ctx)
+
+
     # Visit a parse tree produced by ExprParser#expression.
     def visitExpression(self, ctx:ExprParser.ExpressionContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by ExprParser#cAssign.
+    def visitCAssign(self, ctx:ExprParser.CAssignContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by ExprParser#tAssign.
+    def visitTAssign(self, ctx:ExprParser.TAssignContext):
         return self.visitChildren(ctx)
 
 
@@ -71,6 +96,11 @@ class ExprVisitor(ParseTreeVisitor):
 
     # Visit a parse tree produced by ExprParser#atomParen.
     def visitAtomParen(self, ctx:ExprParser.AtomParenContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by ExprParser#atomIdentifier.
+    def visitAtomIdentifier(self, ctx:ExprParser.AtomIdentifierContext):
         return self.visitChildren(ctx)
 
 

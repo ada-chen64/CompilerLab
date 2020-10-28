@@ -7,16 +7,25 @@ program
     : function+ EOF
     ;
 function 
-    : typ Identifier Lparen Rparen Lbrace statement Rbrace
+    : typ Identifier Lparen Rparen Lbrace statement* Rbrace
     ;
 typ
     : Int #intType
     ;
 statement
     : Return expression Semicolon #returnStmt
+    | expression? Semicolon #exprStmt
+    | declaration #declarStmt
+    ;
+declaration
+    : typ Identifier ('=' expression)? Semicolon
     ;
 expression
-    : logical_or
+    : assignment
+    ;
+assignment
+    : logical_or #cAssign
+    | Identifier '=' expression #tAssign
     ;
 add
     : mult #addMult
@@ -33,6 +42,7 @@ unary
 atom
     : Integer         # atomInteger
     | '(' expression ')'      # atomParen
+    | Identifier #atomIdentifier
     ;
 logical_or
     : logical_and #cLog_or
