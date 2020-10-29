@@ -24,7 +24,7 @@ class LabelCounter:
             self._labels[lab] = 1
         else:
             self._labels[lab] += 1
-        return f"{lab}{self.labels[lab]}"
+        return f"{lab}{self._labels[lab]}"
 class StackIRGen(ExprVisitor):
     def __init__(self, emitter:IREmitter):
         self._E = emitter
@@ -56,29 +56,29 @@ class StackIRGen(ExprVisitor):
         #self.offset.addVar(var)
         
         self.addVar(var)
-    # def visitCondStmt(self, ctx:ExprParser.CondStmtContext):
-    #     #first take care of the if condition expression
-    #     ctx.expression().accept(self) 
-    #     #make labels for exit and else
-    #     exit_label = self._labelCounter.addLabel("end_Label")
-    #     else_label = self._labelCounter.addLabel("else_Label")
-    #     if ctx.caseelse() is not None:
-    #         #if it has else, then branch to else
-    #         self._E(instr.Branch("beqz", else_label))
-    #         #then do the case_if statement
-    #         ctx.caseif.accept(self)
-    #         #branch to end_label
-    #         self._E(instr.Branch("br", exit_label))
-    #         #now do the case_else
-    #         self._E(instr.Label(else_label))
-    #         ctx.caseelse.accept(self)
-    #         #end_label here
-    #         self._E(instr.Label(exit_label))
-    #     else:
-    #         #no else, then just go to end_label
-    #         self._E(instr.Branch("beqz", exit_label))
-    #         ctx.case_if.accept(self)
-    #         self._E(instr.Label(exit_label))
+    def visitCondStmt(self, ctx:ExprParser.CondStmtContext):
+        #first take care of the if condition expression
+        ctx.expression().accept(self) 
+        #make labels for exit and else
+        exit_label = self._labelCounter.addLabel("end_Label")
+        else_label = self._labelCounter.addLabel("else_Label")
+        if ctx.c_el is not None:
+            #if it has else, then branch to else
+            self._E(instr.Branch("beqz", else_label))
+            #then do the case_if statement
+            ctx.c_if.accept(self)
+            #branch to end_label
+            self._E(instr.Branch("br", exit_label))
+            #now do the case_else
+            self._E(instr.Label(else_label))
+            ctx.c_el.accept(self)
+            #end_label here
+            self._E(instr.Label(exit_label))
+        else:
+            #no else, then just go to end_label
+            self._E(instr.Branch("beqz", exit_label))
+            ctx.c_if.accept(self)
+            self._E(instr.Label(exit_label))
 
     def visitAtomIdentifier(self, ctx:ExprParser.AtomIdentifierContext):
         var = text(ctx.Identifier())
@@ -149,20 +149,20 @@ class StackIRGen(ExprVisitor):
         self.visitChildren(ctx)
         op = text(ctx.InEqOp())
         self._E(instr.Relational(op))
-    # def visitTCondi(self, ctx:ExprParser.TCondiContext):
-    #     #logical_or '?' expression ':' conditional
-    #     #if logical_or is true, do expression, else do conditional
-    #     ctx.logical_or.accept(self)
-    #     #make end and else labels
-    #     exit_label = self._labelCounter.addLabel("end_Label")
-    #     else_label = self._labelCounter.addLabel("else_Label")
-    #     self._E(instr.Branch("beqz", else_label))
-    #     #then do theexpresion
-    #     ctx.expression.accept(self)
-    #     #branch to end_label
-    #     self._E(instr.Branch("br", exit_label))
-    #     #now do the conditional
-    #     self._E(instr.Label(else_label))
-    #     ctx.conditional.accept(self)
-    #     #end_label here
-    #     self._E(instr.Label(exit_label))
+    def visitTCond(self, ctx:ExprParser.TCondContext):
+        #logical_or '?' expression ':' conditional
+        #if logical_or is true, do expression, else do conditional
+        ctx.logical_or().accept(self)
+        #make end and else labels
+        exit_label = self._labelCounter.addLabel("end_Label")
+        else_label = self._labelCounter.addLabel("else_Label")
+        self._E(instr.Branch("beqz", else_label))
+        #then do theexpresion
+        ctx.expression().accept(self)
+        #branch to end_label
+        self._E(instr.Branch("br", exit_label))
+        #now do the conditional
+        self._E(instr.Label(else_label))
+        ctx.conditional().accept(self)
+        #end_label here
+        self._E(instr.Label(exit_label))

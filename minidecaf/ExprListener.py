@@ -35,6 +35,15 @@ class ExprListener(ParseTreeListener):
         pass
 
 
+    # Enter a parse tree produced by ExprParser#block_item.
+    def enterBlock_item(self, ctx:ExprParser.Block_itemContext):
+        pass
+
+    # Exit a parse tree produced by ExprParser#block_item.
+    def exitBlock_item(self, ctx:ExprParser.Block_itemContext):
+        pass
+
+
     # Enter a parse tree produced by ExprParser#returnStmt.
     def enterReturnStmt(self, ctx:ExprParser.ReturnStmtContext):
         pass
@@ -53,12 +62,12 @@ class ExprListener(ParseTreeListener):
         pass
 
 
-    # Enter a parse tree produced by ExprParser#declarStmt.
-    def enterDeclarStmt(self, ctx:ExprParser.DeclarStmtContext):
+    # Enter a parse tree produced by ExprParser#condStmt.
+    def enterCondStmt(self, ctx:ExprParser.CondStmtContext):
         pass
 
-    # Exit a parse tree produced by ExprParser#declarStmt.
-    def exitDeclarStmt(self, ctx:ExprParser.DeclarStmtContext):
+    # Exit a parse tree produced by ExprParser#condStmt.
+    def exitCondStmt(self, ctx:ExprParser.CondStmtContext):
         pass
 
 
@@ -176,6 +185,24 @@ class ExprListener(ParseTreeListener):
 
     # Exit a parse tree produced by ExprParser#atomIdentifier.
     def exitAtomIdentifier(self, ctx:ExprParser.AtomIdentifierContext):
+        pass
+
+
+    # Enter a parse tree produced by ExprParser#cCond.
+    def enterCCond(self, ctx:ExprParser.CCondContext):
+        pass
+
+    # Exit a parse tree produced by ExprParser#cCond.
+    def exitCCond(self, ctx:ExprParser.CCondContext):
+        pass
+
+
+    # Enter a parse tree produced by ExprParser#tCond.
+    def enterTCond(self, ctx:ExprParser.TCondContext):
+        pass
+
+    # Exit a parse tree produced by ExprParser#tCond.
+    def exitTCond(self, ctx:ExprParser.TCondContext):
         pass
 
 

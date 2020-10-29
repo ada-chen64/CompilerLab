@@ -44,9 +44,11 @@ def main():
         parser = ExprParser(tokens)
         parser._listeners = [MyErrorListener()]
         tree = parser.program()
-        #print(tree.toStringTree(recog=parser))
+        # print(tree.toStringTree(recog=parser))
         # print(tree.accept(visitor))
+
         ir = irGenerator(tree)
+
         # for instr in ir.instrs:
         #         print(type(instr))
         asm = asmGenerator(ir, "lmao.txt")

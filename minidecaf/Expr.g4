@@ -7,15 +7,19 @@ program
     : function+ EOF
     ;
 function 
-    : typ Identifier Lparen Rparen Lbrace statement* Rbrace
+    : typ Identifier Lparen Rparen '{' block_item* '}'
     ;
 typ
     : Int #intType
     ;
+block_item
+    : statement
+    | declaration
+    ;
 statement
-    : Return expression Semicolon #returnStmt
-    | expression? Semicolon #exprStmt
-    | declaration #declarStmt
+    : Return expression ';' #returnStmt
+    | expression? ';' #exprStmt
+    | 'if' '(' expression ')' c_if=statement ('else' c_el=statement)? #condStmt
     ;
 declaration
     : typ Identifier ('=' expression)? Semicolon
@@ -24,7 +28,7 @@ expression
     : assignment
     ;
 assignment
-    : logical_or #cAssign
+    : conditional #cAssign
     | Identifier '=' expression #tAssign
     ;
 add
@@ -44,6 +48,11 @@ atom
     | '(' expression ')'      # atomParen
     | Identifier #atomIdentifier
     ;
+conditional
+    : logical_or #cCond
+    | logical_or '?' expression ':' conditional #tCond
+    ;
+
 logical_or
     : logical_and #cLog_or
     | logical_or '||' logical_and #tLog_or

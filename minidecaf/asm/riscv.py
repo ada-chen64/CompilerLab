@@ -80,6 +80,15 @@ def logical(op):
         return pop("t1", "t2") + [f"snez t1, t1", f"snez t2, t2", f"and t1, t2, t1"] + push("t1")
     elif(inst == 'lor'):
         return pop("t1", "t2") + [f"or t1, t2, t1", f"snez t1, t1"] + push("t1")
+
+@Instrs
+def branch(op, label:str):
+    if op is 'br':
+        return [f"j {label}"]
+    else:
+        return pop("t1") + [f"{op} t1, {label}"]
+
+
 @Instrs
 def frameAddr(k):
     return push("fp", k) + binary("+")
@@ -87,6 +96,8 @@ def frameAddr(k):
 @Instrs
 def ret(func:str):
     return [f"beqz x0, {func}_epilogue"]
+
+
 
 class RISCVAsmGen:
     def __init__(self, emitter):
@@ -130,6 +141,12 @@ class RISCVAsmGen:
     def genLoad(self, instr:Load):
         self._E(load())
     
+    def genLabel(self, instr:Label):
+        self._E([AsmLabel(instr.label)])
+    
+    def genBranch(self, instr:Branch):
+        self._E(branch(instr.op, instr.label))
+
     def genPrologue(self, funcname:str):
         self._E([
             AsmBlank(),
@@ -165,5 +182,5 @@ LNOT: RISCVAsmGen.genLNot, Not: RISCVAsmGen.genNot, Neg: RISCVAsmGen.genNeg, \
 Binaries: RISCVAsmGen.genBinary, Equalities: RISCVAsmGen.genEqualities, \
 Relational : RISCVAsmGen.genRelational, Logical: RISCVAsmGen.genLogical, \
 Pop: RISCVAsmGen.genPop, Store: RISCVAsmGen.genStore, Load: RISCVAsmGen.genLoad, \
-FrameAddr: RISCVAsmGen.genFrameAddr}
+FrameAddr: RISCVAsmGen.genFrameAddr, Label: RISCVAsmGen.genLabel, Branch: RISCVAsmGen.genBranch}
 

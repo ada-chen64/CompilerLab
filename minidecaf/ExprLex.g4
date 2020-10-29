@@ -35,9 +35,7 @@ Int: 'int';
 Return: 'return';
 Identifier: [a-zA-Z_][a-zA-Z0-9_]*;
 
-//keywords
-If: 'if';
-Else: 'else';
+
 
 //错
 Error: '.';
