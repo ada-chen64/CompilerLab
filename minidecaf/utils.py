@@ -1,3 +1,4 @@
+from copy import deepcopy
 MAX_INT = 2**31 - 1
 MIN_INT = -2**31
 INT_SIZE = 8
@@ -18,3 +19,42 @@ def flatten(l):
         else:
             newlist += [i]
     return newlist
+
+def incorInit(d:dict, key, init=0):
+    if key in d:
+        d[key] += 1
+    else:
+        d[key] = init
+def noOp(*args, **kwargs):
+    pass
+
+class stack_dict():
+    def __init__(self):
+        self._upp = [{}]
+        self._cur = [{}]
+    def __getitem__(self, key):
+        return self._upp[-1][key]
+
+    def __setitem__(self, key, value):
+        self._cur[-1][key] = self._upp[-1][key] = value
+        #print(self._upp)
+
+    def __contains__(self, key):
+        return key in self._upp[-1]
+
+    def __len__(self):
+        return len(self._upp[-1])
+
+    def push(self):
+        self._upp.append(deepcopy(self._upp[-1]))
+        self._cur.append({})
+        #print(self._upp)
+
+    def pop(self):
+        assert len(self._upp) > 1
+        self._upp.pop()
+        self._cur.pop()
+        #print(self._upp)
+
+    def peek(self, last=0):
+        return self._cur[-1-last]

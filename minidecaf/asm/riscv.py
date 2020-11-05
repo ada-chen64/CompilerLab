@@ -24,7 +24,7 @@ def push(*vals):
 def _pop(reg):
     if reg is None:
         return [f"addi sp, sp, 8"]
-    return [f"lw {reg}, 0(sp)"] + [f"addi sp, sp, 8"]
+    return ([f"lw {reg}, 0(sp)"] if reg is not None else []) + [f"addi sp, sp, 8"]
 def pop(*regs):
     return flatten(map(_pop, regs))
 
@@ -110,7 +110,8 @@ class RISCVAsmGen:
         self._E(push(instr.v))
     
     def genPop(self, instr:Pop):
-        self._E(pop())
+        #print("genPOP")
+        self._E(pop(None))
 
     def genNeg(self, instr:Neg):
         self._E(neg("t1"))
@@ -146,7 +147,8 @@ class RISCVAsmGen:
     
     def genBranch(self, instr:Branch):
         self._E(branch(instr.op, instr.label))
-
+    def genComments(self, instr:Comment):
+        self._E([AsmComment(instr.comment)])
     def genPrologue(self, funcname:str):
         self._E([
             AsmBlank(),
@@ -182,5 +184,6 @@ LNOT: RISCVAsmGen.genLNot, Not: RISCVAsmGen.genNot, Neg: RISCVAsmGen.genNeg, \
 Binaries: RISCVAsmGen.genBinary, Equalities: RISCVAsmGen.genEqualities, \
 Relational : RISCVAsmGen.genRelational, Logical: RISCVAsmGen.genLogical, \
 Pop: RISCVAsmGen.genPop, Store: RISCVAsmGen.genStore, Load: RISCVAsmGen.genLoad, \
-FrameAddr: RISCVAsmGen.genFrameAddr, Label: RISCVAsmGen.genLabel, Branch: RISCVAsmGen.genBranch}
+FrameAddr: RISCVAsmGen.genFrameAddr, Label: RISCVAsmGen.genLabel, \
+Branch: RISCVAsmGen.genBranch, Comment: RISCVAsmGen.genComments}
 

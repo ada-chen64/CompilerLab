@@ -7,10 +7,13 @@ program
     : function+ EOF
     ;
 function 
-    : typ Identifier Lparen Rparen '{' block_item* '}'
+    : typ Identifier '(' ')' compound_statement
     ;
 typ
     : Int #intType
+    ;
+compound_statement
+    :'{' block_item* '}'
     ;
 block_item
     : statement
@@ -20,6 +23,7 @@ statement
     : Return expression ';' #returnStmt
     | expression? ';' #exprStmt
     | 'if' '(' expression ')' c_if=statement ('else' c_el=statement)? #condStmt
+    | compound_statement #cmpdStmt
     ;
 declaration
     : typ Identifier ('=' expression)? Semicolon

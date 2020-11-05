@@ -5,7 +5,8 @@ from ..utils import *
 class IRInstr:
     def __repr__(self):
         return self.__str__()
-
+    def __str__(self):
+        return ""
 
 class Const(IRInstr):
     def __init__(self, v:int):
@@ -86,3 +87,8 @@ class Label(IRInstr):
         self.label = label
     def __str__(self):
         return f"label {self.label}"
+class Comment(IRInstr):
+    def __init__(self, comment:str):
+        self.comment = comment
+    def __str__(self):
+        return f"# {self.comment}"
