@@ -24,9 +24,15 @@ statement
     | expression? ';' #exprStmt
     | 'if' '(' expression ')' c_if=statement ('else' c_el=statement)? #condStmt
     | compound_statement #cmpdStmt
+    | 'for' '(' init=expression? ';' cond=expression? ';' incr=expression? ')' statement #forStmt
+    | 'for' '(' declaration cond=expression? ';' incr=expression?  ')' statement #forDeclStmt
+    | 'while' '(' expression ')' statement #whileStmt
+    | 'do' statement 'while' '(' expression ')' ';' #doStmt
+    | 'break' ';' #breakStmt
+    | 'continue' ';' #contStmt
     ;
 declaration
-    : typ Identifier ('=' expression)? Semicolon
+    : typ Identifier ('=' expression)? ';'
     ;
 expression
     : assignment

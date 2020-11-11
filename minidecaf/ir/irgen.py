@@ -46,6 +46,8 @@ class LabelCounter:
         else:
             self._labels[lab] += 1
         return f"{lab}{self._labels[lab]}"
+    def getLabel(self, lab= "LABEL"):
+        return f"{lab}{self._labels[lab]}"
 class StackIRGen(ExprVisitor):
     def __init__(self, emitter:IREmitter):
         self._E = emitter
@@ -92,8 +94,9 @@ class StackIRGen(ExprVisitor):
     def visitExprStmt(self, ctx:ExprParser.ExprStmtContext):
         if ctx.expression() is not None:
             ctx.expression().accept(self)
-        self._E(instr.Comment("Pop due to expr"))
-        self._E(instr.Pop())
+            self._E(instr.Comment("Pop due to expr"))
+            self._E(instr.Pop())
+        
     def visitDeclaration(self, ctx:ExprParser.DeclarationContext):
         
         ident = ctx.Identifier()
@@ -110,6 +113,7 @@ class StackIRGen(ExprVisitor):
         #self.addVar(var)
     def visitCondStmt(self, ctx:ExprParser.CondStmtContext):
         #first take care of the if condition expression
+        self._E(instr.Comment("if statement"))
         ctx.expression().accept(self) 
         #make labels for exit and else
         exit_label = self._labelCounter.addLabel("end_Label")
@@ -131,6 +135,87 @@ class StackIRGen(ExprVisitor):
             self._E(instr.Branch("beqz", exit_label))
             ctx.c_if.accept(self)
             self._E(instr.Label(exit_label))
+    
+    def visitForStmt(self, ctx:ExprParser.ForStmtContext):
+        #first do initialize expression
+        self._E(instr.Comment("for Block"))
+        self.newBlock(ctx)
+        if ctx.init is not None:
+            ctx.init.accept(self)
+        begin_looplabel = self._labelCounter.addLabel("beginloop_Label")
+        break_label = self._labelCounter.addLabel("breakloop_Label")
+        cont_label = self._labelCounter.addLabel("continue_Label")
+        self._E(instr.Label(begin_looplabel))
+        if ctx.cond is not None:
+            ctx.cond.accept(self)
+            self._E(instr.Branch("beqz", break_label))
+        ctx.statement().accept(self)
+        self._E(instr.Label(cont_label))
+        if ctx.incr is not None:
+            ctx.incr.accept(self)
+            self._E(instr.Pop())
+        self._E(instr.Branch("br", begin_looplabel))
+        self._E(instr.Label(break_label))
+        pt = self.popBlock(ctx)
+        #print("pop time",pt)
+        self._E(instr.Comment("for Pop"))
+        for i in range(pt):
+            self._E(instr.Pop())
+    
+    def visitForDeclStmt(self, ctx:ExprParser.ForDeclStmtContext):
+        self._E(instr.Comment("for Block"))
+        self.newBlock(ctx)
+        ctx.declaration().accept(self)
+        begin_looplabel = self._labelCounter.addLabel("beginloop_Label")
+        break_label = self._labelCounter.addLabel("breakloop_Label")
+        cont_label = self._labelCounter.addLabel("continue_Label")
+        self._E(instr.Label(begin_looplabel))
+        if ctx.cond is not None:
+            ctx.cond.accept(self)
+            self._E(instr.Branch("beqz", break_label))
+        ctx.statement().accept(self)
+        self._E(instr.Label(cont_label))
+        if ctx.incr is not None:
+            ctx.incr.accept(self)
+            self._E(instr.Pop())
+        self._E(instr.Branch("br", begin_looplabel))
+        self._E(instr.Label(break_label))
+        pt = self.popBlock(ctx)
+        #print("pop time",pt)
+        for i in range(pt):
+            self._E(instr.Comment("Pop"))
+            self._E(instr.Pop())
+    def visitWhileStmt(self, ctx:ExprParser.WhileStmtContext):
+        begin_looplabel = self._labelCounter.addLabel("beginloop_Label")
+        break_label = self._labelCounter.addLabel("breakloop_Label")
+        cont_label = self._labelCounter.addLabel("continue_Label")
+        self._E(instr.Label(begin_looplabel))
+        ctx.expression().accept(self)
+        self._E(instr.Branch("beqz", break_label))
+        ctx.statement().accept(self)
+        self._E(instr.Label(cont_label))
+        self._E(instr.Branch("br", begin_looplabel))
+        self._E(instr.Label(break_label))
+
+
+    def visitDoStmt(self, ctx:ExprParser.DoStmtContext):
+        begin_looplabel = self._labelCounter.addLabel("beginloop_Label")
+        break_label = self._labelCounter.addLabel("breakloop_Label")
+        cont_label = self._labelCounter.addLabel("continue_Label")
+        self._E(instr.Label(begin_looplabel))
+        ctx.expression().accept(self)
+        self._E(instr.Branch("beqz", break_label))
+        ctx.statement().accept(self)
+        self._E(instr.Label(cont_label))
+        self._E(instr.Branch("br", begin_looplabel))
+        self._E(instr.Label(break_label))
+
+    
+    def visitBreakStmt(self, ctx:ExprParser.BreakStmtContext):
+        self._E(instr.Branch("br", self._labelCounter.getLabel("breakloop_Label")))
+
+    def visitContStmt(self, ctx:ExprParser.ContStmtContext):
+        self._E(instr.Branch("br", self._labelCounter.getLabel("continue_Label")))
 
     def visitAtomIdentifier(self, ctx:ExprParser.AtomIdentifierContext):
         ident = ctx.Identifier()
@@ -141,6 +226,7 @@ class StackIRGen(ExprVisitor):
         self._E(instr.Comment("frameaddress load"))
         self._E(instr.FrameAddr(off))
         self._E(instr.Load())
+        self._E(instr.Comment("frameaddress load done"))
     
     def visitTAssign(self, ctx:ExprParser.TAssignContext):
         self.visitChildren(ctx)
@@ -152,6 +238,7 @@ class StackIRGen(ExprVisitor):
         self._E(instr.Comment("frameaddress store"))
         self._E(instr.FrameAddr(off))
         self._E(instr.Store())
+        self._E(instr.Comment("frameaddress store done"))
         
 
     def visitCUnary(self, ctx:ExprParser.UnaryContext):
@@ -183,7 +270,9 @@ class StackIRGen(ExprVisitor):
             op = text(ctx.Add())
         if(ctx.Sub()):
             op = text(ctx.Sub())
+        self._E(instr.Comment("binaries begin"))
         self._E(instr.Binaries(op))
+        self._E(instr.Comment("binaries end"))
         #print(op)
     def visitMultOpUnary(self, ctx:ExprParser.MultOpUnaryContext):
         self.visitChildren(ctx)
@@ -204,6 +293,7 @@ class StackIRGen(ExprVisitor):
         op = text(ctx.EqOp())
         self._E(instr.Equalities(op))
     def visitTRelational(self, ctx:ExprParser.TRelationalContext):
+        self._E(instr.Comment("relational"))
         self.visitChildren(ctx)
         op = text(ctx.InEqOp())
         self._E(instr.Relational(op))

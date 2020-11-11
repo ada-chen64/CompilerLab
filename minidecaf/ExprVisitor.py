@@ -54,6 +54,36 @@ class ExprVisitor(ParseTreeVisitor):
         return self.visitChildren(ctx)
 
 
+    # Visit a parse tree produced by ExprParser#forStmt.
+    def visitForStmt(self, ctx:ExprParser.ForStmtContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by ExprParser#forDeclStmt.
+    def visitForDeclStmt(self, ctx:ExprParser.ForDeclStmtContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by ExprParser#whileStmt.
+    def visitWhileStmt(self, ctx:ExprParser.WhileStmtContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by ExprParser#doStmt.
+    def visitDoStmt(self, ctx:ExprParser.DoStmtContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by ExprParser#breakStmt.
+    def visitBreakStmt(self, ctx:ExprParser.BreakStmtContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by ExprParser#contStmt.
+    def visitContStmt(self, ctx:ExprParser.ContStmtContext):
+        return self.visitChildren(ctx)
+
+
     # Visit a parse tree produced by ExprParser#declaration.
     def visitDeclaration(self, ctx:ExprParser.DeclarationContext):
         return self.visitChildren(ctx)

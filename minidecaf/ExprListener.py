@@ -89,6 +89,60 @@ class ExprListener(ParseTreeListener):
         pass
 
 
+    # Enter a parse tree produced by ExprParser#forStmt.
+    def enterForStmt(self, ctx:ExprParser.ForStmtContext):
+        pass
+
+    # Exit a parse tree produced by ExprParser#forStmt.
+    def exitForStmt(self, ctx:ExprParser.ForStmtContext):
+        pass
+
+
+    # Enter a parse tree produced by ExprParser#forDeclStmt.
+    def enterForDeclStmt(self, ctx:ExprParser.ForDeclStmtContext):
+        pass
+
+    # Exit a parse tree produced by ExprParser#forDeclStmt.
+    def exitForDeclStmt(self, ctx:ExprParser.ForDeclStmtContext):
+        pass
+
+
+    # Enter a parse tree produced by ExprParser#whileStmt.
+    def enterWhileStmt(self, ctx:ExprParser.WhileStmtContext):
+        pass
+
+    # Exit a parse tree produced by ExprParser#whileStmt.
+    def exitWhileStmt(self, ctx:ExprParser.WhileStmtContext):
+        pass
+
+
+    # Enter a parse tree produced by ExprParser#doStmt.
+    def enterDoStmt(self, ctx:ExprParser.DoStmtContext):
+        pass
+
+    # Exit a parse tree produced by ExprParser#doStmt.
+    def exitDoStmt(self, ctx:ExprParser.DoStmtContext):
+        pass
+
+
+    # Enter a parse tree produced by ExprParser#breakStmt.
+    def enterBreakStmt(self, ctx:ExprParser.BreakStmtContext):
+        pass
+
+    # Exit a parse tree produced by ExprParser#breakStmt.
+    def exitBreakStmt(self, ctx:ExprParser.BreakStmtContext):
+        pass
+
+
+    # Enter a parse tree produced by ExprParser#contStmt.
+    def enterContStmt(self, ctx:ExprParser.ContStmtContext):
+        pass
+
+    # Exit a parse tree produced by ExprParser#contStmt.
+    def exitContStmt(self, ctx:ExprParser.ContStmtContext):
+        pass
+
+
     # Enter a parse tree produced by ExprParser#declaration.
     def enterDeclaration(self, ctx:ExprParser.DeclarationContext):
         pass
