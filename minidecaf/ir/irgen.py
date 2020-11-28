@@ -65,12 +65,12 @@ class StackIRGen(ExprVisitor):
     def visitFuncDef(self, ctx:ExprParser.FuncDefContext):
         func_name = text(ctx.Identifier())
         if func_name in self._functionManager.functions:
-            raise MiniDecafLocatedError(f"redefinition of function {func}")
+            raise ExprLocatedError(f"redefinition of function {func}")
         self.newBlock(ctx)
         paramInfo = ParamInfo(ctx.param_list().accept(self))
         if func_name in self._functionManager.paramInfos:
             if not self._functionManager.paramInfos[func_name].compatible(paramInfo):
-                raise MiniDecafLocatedError(f"conflicting types for {func}")
+                raise ExprLocatedError(f"conflicting types for {func}")
         self._functionManager.enterfunction(func_name, paramInfo)
         self._E.enterfunction(func_name, paramInfo)
         ctx.temp_stmt().accept(self)
@@ -82,7 +82,7 @@ class StackIRGen(ExprVisitor):
         paramInfo = ParamInfo(ctx.param_list().accept(self))
         if func_name in self._functionManager.paramInfos:
             if not self._functionManager.paramInfos[func_name].compatible(paramInfo):
-                raise MiniDecafLocatedError(f"conflicting types for {func}")
+                raise ExprLocatedError(f"conflicting types for {func}")
         elif func_name not in self._functionManager.paramInfos:
             self._functionManager.paramInfos[func_name] = paramInfo
         self.popBlock(ctx)
@@ -115,7 +115,7 @@ class StackIRGen(ExprVisitor):
         else:
             self._E(instr.Const(0))
         if text(ident) in self._varstack.peek():
-            raise MiniDecafLocatedError(ctx, f"redefinition of {var}")
+            raise ExprLocatedError(ctx, f"redefinition of {var}")
         self.decVar(ctx, ident)
         #self.offset.addVar(var)
         
@@ -336,7 +336,7 @@ class StackIRGen(ExprVisitor):
         #     print(key)
         #     print(self._functionManager.paramInfos)
         if len(args) != self._functionManager.paramInfos[func_name].param_num:
-            raise MiniDecafLocatedError(ctx, f"wrong argument number")
+            raise ExprLocatedError(ctx, f"wrong argument number")
         for arg in reversed(args):
             arg.accept(self)
         self._E(instr.Call(func_name))

@@ -7,11 +7,11 @@ eqsymbols = {'==' : 'eq', '!=' :'ne'}
 relatesymbols = {'<=' : 'le', '>=' : 'ge', '<' :'lt', '>':'gt'}
 logicsymbols = {'&&' : 'land', '||' : 'lor'}
 branchOp =['beqz', 'bnez', 'br', 'beq']
-class MiniDecafError(Exception):
+class ExprError(Exception):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, *kwargs)
 
-class MiniDecafLocatedError(MiniDecafError):
+class ExprLocatedError(ExprError):
     def __init__(self, ctx, msg:str):
         self.msg = f"input:{ctx.start.line},{ctx.start.column}: {msg}"
 
