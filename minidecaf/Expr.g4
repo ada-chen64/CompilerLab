@@ -4,20 +4,28 @@ import ExprLex;
 
 
 program
-    : function+ EOF
+    : function+ EOF 
     ;
 function 
-    : typ Identifier '(' ')' compound_statement
+    : typ Identifier '('param_list ')' '{' temp_stmt '}'  #funcDef
+    | typ Identifier '('param_list ')' ';' #funcDecl
     ;
 typ
     : Int #intType
+    ;
+param_list
+    : (declaration (',' declaration)*)?
+    ;
+temp_stmt
+    : compound_statement
+    | block_item*
     ;
 compound_statement
     :'{' block_item* '}'
     ;
 block_item
     : statement
-    | declaration
+    | declaration ';'
     ;
 statement
     : Return expression ';' #returnStmt
@@ -25,14 +33,17 @@ statement
     | 'if' '(' expression ')' c_if=statement ('else' c_el=statement)? #condStmt
     | compound_statement #cmpdStmt
     | 'for' '(' init=expression? ';' cond=expression? ';' incr=expression? ')' statement #forStmt
-    | 'for' '(' declaration cond=expression? ';' incr=expression?  ')' statement #forDeclStmt
+    | 'for' '(' declaration ';' cond=expression? ';' incr=expression?  ')' statement #forDeclStmt
     | 'while' '(' expression ')' statement #whileStmt
     | 'do' statement 'while' '(' expression ')' ';' #doStmt
     | 'break' ';' #breakStmt
     | 'continue' ';' #contStmt
     ;
 declaration
-    : typ Identifier ('=' expression)? ';'
+    : typ Identifier ('=' expression)? 
+    ;
+expr_list
+    : (expression (',' expression)*)?
     ;
 expression
     : assignment
@@ -50,8 +61,12 @@ mult
     | mult (MulOp) unary #multOpUnary
     ;
 unary
-    : atom #tUnary
+    : postfix #tUnary
     | ('-'|'!'|'~') unary #cUnary
+    ;
+postfix
+    : atom #tPostFix
+    | Identifier '(' expr_list ')' #cPostFix
     ;
 atom
     : Integer         # atomInteger

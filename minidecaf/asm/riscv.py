@@ -94,6 +94,10 @@ def frameAddr(k):
     return push("fp", k) + binary("+")
 
 @Instrs
+def call(func:str, argnum:int):
+    poptimes = pop(*[None]*argnum)
+    return [f"call {func}"] + poptimes + push("a0")
+@Instrs
 def ret(func:str):
     return [f"beqz x0, {func}_epilogue"]
 
@@ -149,7 +153,13 @@ class RISCVAsmGen:
         self._E(branch(instr.op, instr.label))
     def genComments(self, instr:Comment):
         self._E([AsmComment(instr.comment)])
-    def genPrologue(self, funcname:str):
+    def genCall(self, instr:Call):
+        for f in self.ir.funcs:
+            if f.name == instr.func_name:
+                func = f
+                break
+        self._E(call(func.name, func.param.param_num))
+    def genPrologue(self, funcname:str, param_num):
         self._E([
             AsmBlank(),
             AsmDirective(".text"),
@@ -158,7 +168,13 @@ class RISCVAsmGen:
         self._E(push("ra", "fp")) 
         self._E([
             AsmInstr("mv fp, sp"),
-            AsmComment("End Prologue"),
+            AsmComment("copy args:")])
+        for i in range(param_num):
+            fr, to = 8*(i+2), -8*(i+1)
+            self._E([
+                AsmInstr(f"lw t1, {fr}(fp)")] +
+                push("t1"))
+        self._E([AsmComment("End Prologue"),
             AsmBlank()])
 
     def genEpilogue(self, funcname:str):
@@ -173,11 +189,15 @@ class RISCVAsmGen:
             AsmInstr("jr ra")
         ])
     def gen(self, ir):
-        self.genPrologue("main")
-        for instr in ir.instrs:
+        self.ir = ir
+        for func in ir.funcs:
            # print(type(instr))
-            _g[type(instr)](self, instr)
-        self.genEpilogue("main")
+            self.genPrologue(f"{func.name}", func.param.param_num)
+            for instr in func.instrs:
+                if type(instr) is not Comment:
+                    self._E([AsmComment(instr)])
+                _g[type(instr)](self, instr)
+            self.genEpilogue(f"{func.name}")
 
 _g = { Ret: RISCVAsmGen.genRet, Const: RISCVAsmGen.genConst, \
 LNOT: RISCVAsmGen.genLNot, Not: RISCVAsmGen.genNot, Neg: RISCVAsmGen.genNeg, \
@@ -185,5 +205,5 @@ Binaries: RISCVAsmGen.genBinary, Equalities: RISCVAsmGen.genEqualities, \
 Relational : RISCVAsmGen.genRelational, Logical: RISCVAsmGen.genLogical, \
 Pop: RISCVAsmGen.genPop, Store: RISCVAsmGen.genStore, Load: RISCVAsmGen.genLoad, \
 FrameAddr: RISCVAsmGen.genFrameAddr, Label: RISCVAsmGen.genLabel, \
-Branch: RISCVAsmGen.genBranch, Comment: RISCVAsmGen.genComments}
+Branch: RISCVAsmGen.genBranch, Comment: RISCVAsmGen.genComments, Call: RISCVAsmGen.genCall}
 

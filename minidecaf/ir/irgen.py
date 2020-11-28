@@ -1,4 +1,5 @@
 from . import *
+from .funcmanage import *
 import sys
 sys.path.append('..')
 from ..utils import *
@@ -16,25 +17,6 @@ class OffsetManage:
         if var is not None:
             self._offtable[var] = self._top
         return self._top
-class Variables:
-    _varcnt = {}
-    def __init__(self, ident:str, offset:int):
-        incorInit(Variables._varcnt, ident)
-        self.id = Variables._varcnt
-        self.ident = ident
-        self.offset = offset
-    def __eq__(self, other):
-        return self.id == other.id and self.ident == other.ident and\
-            self.offset == other.offset
-
-    def __str__(self):
-        return f"{self.ident}({self.id})"
-
-    def __repr__(self):
-        return self.__str__()
-
-    def __hash__(self):
-        return hash((self.ident, self.id, self.offset))
 
 
 class LabelCounter:
@@ -53,6 +35,7 @@ class StackIRGen(ExprVisitor):
         self._E = emitter
         # self._offtable = {}
         # self._top = 0
+        self._functionManager = FunctionManager()
         self._labelCounter = LabelCounter()
         self._frameSlots = [] #keeps track of frame slots used for each block
         self._curFrameSlot = 0 #frame slots used for THIS block
@@ -78,8 +61,33 @@ class StackIRGen(ExprVisitor):
     #     if var is not None:
     #         self._offtable[var] = self._top
     #     return self._top
+    
+    def visitFuncDef(self, ctx:ExprParser.FuncDefContext):
+        func_name = text(ctx.Identifier())
+        if func_name in self._functionManager.functions:
+            raise MiniDecafLocatedError(f"redefinition of function {func}")
+        self.newBlock(ctx)
+        paramInfo = ParamInfo(ctx.param_list().accept(self))
+        if func_name in self._functionManager.paramInfos:
+            if not self._functionManager.paramInfos[func_name].compatible(paramInfo):
+                raise MiniDecafLocatedError(f"conflicting types for {func}")
+        self._functionManager.enterfunction(func_name, paramInfo)
+        self._E.enterfunction(func_name, paramInfo)
+        ctx.temp_stmt().accept(self)
+        self.popBlock(ctx)
+        self._E.exitfunction()
+    def visitFuncDecl(self, ctx:ExprParser.FuncDeclContext):
+        func_name = text(ctx.Identifier())
+        self.newBlock(ctx)
+        paramInfo = ParamInfo(ctx.param_list().accept(self))
+        if func_name in self._functionManager.paramInfos:
+            if not self._functionManager.paramInfos[func_name].compatible(paramInfo):
+                raise MiniDecafLocatedError(f"conflicting types for {func}")
+        elif func_name not in self._functionManager.paramInfos:
+            self._functionManager.paramInfos[func_name] = paramInfo
+        self.popBlock(ctx)
     def visitCompound_statement(self, ctx:ExprParser.Compound_statementContext):
-        self._E(instr.Comment("new Block"))
+        self._E(instr.Comment("new Block cmpd_stmt"))
         self.newBlock(ctx)
         self.visitChildren(ctx)
         pt = self.popBlock(ctx)
@@ -91,6 +99,7 @@ class StackIRGen(ExprVisitor):
         #print("visit return")
         self.visitChildren(ctx)
         self._E(instr.Ret())
+
     def visitExprStmt(self, ctx:ExprParser.ExprStmtContext):
         if ctx.expression() is not None:
             ctx.expression().accept(self)
@@ -314,3 +323,20 @@ class StackIRGen(ExprVisitor):
         ctx.conditional().accept(self)
         #end_label here
         self._E(instr.Label(exit_label))
+    def visitParam_list(self, ctx:ExprParser.Param_listContext):
+        self.visitChildren(ctx)
+        def f(decl):
+            return self._varstack[text(decl.Identifier())]
+        return list(map(f, ctx.declaration()))
+    def visitCPostFix(self, ctx:ExprParser.CPostFixContext):
+        func_name = text(ctx.Identifier())
+        args = ctx.expr_list().expression()
+        # print(func_name)
+        # for key, value in self._functionManager.paramInfos.items():
+        #     print(key)
+        #     print(self._functionManager.paramInfos)
+        if len(args) != self._functionManager.paramInfos[func_name].param_num:
+            raise MiniDecafLocatedError(ctx, f"wrong argument number")
+        for arg in reversed(args):
+            arg.accept(self)
+        self._E(instr.Call(func_name))

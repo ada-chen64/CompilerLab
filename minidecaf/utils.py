@@ -7,6 +7,17 @@ eqsymbols = {'==' : 'eq', '!=' :'ne'}
 relatesymbols = {'<=' : 'le', '>=' : 'ge', '<' :'lt', '>':'gt'}
 logicsymbols = {'&&' : 'land', '||' : 'lor'}
 branchOp =['beqz', 'bnez', 'br', 'beq']
+class MiniDecafError(Exception):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, *kwargs)
+
+class MiniDecafLocatedError(MiniDecafError):
+    def __init__(self, ctx, msg:str):
+        self.msg = f"input:{ctx.start.line},{ctx.start.column}: {msg}"
+
+    def __str__(self):
+        return self.msg
+        
 def text(x):
     if x is not None:
         return str(x.getText())

@@ -92,3 +92,9 @@ class Comment(IRInstr):
         self.comment = comment
     def __str__(self):
         return f"# {self.comment}"
+
+class Call(IRInstr):
+    def __init__(self, func_name:str):
+        self.func_name = func_name
+    def __str__(self):
+        return f"call {self.func_name}"

@@ -14,13 +14,28 @@ class ExprVisitor(ParseTreeVisitor):
         return self.visitChildren(ctx)
 
 
-    # Visit a parse tree produced by ExprParser#function.
-    def visitFunction(self, ctx:ExprParser.FunctionContext):
+    # Visit a parse tree produced by ExprParser#funcDef.
+    def visitFuncDef(self, ctx:ExprParser.FuncDefContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by ExprParser#funcDecl.
+    def visitFuncDecl(self, ctx:ExprParser.FuncDeclContext):
         return self.visitChildren(ctx)
 
 
     # Visit a parse tree produced by ExprParser#intType.
     def visitIntType(self, ctx:ExprParser.IntTypeContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by ExprParser#param_list.
+    def visitParam_list(self, ctx:ExprParser.Param_listContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by ExprParser#temp_stmt.
+    def visitTemp_stmt(self, ctx:ExprParser.Temp_stmtContext):
         return self.visitChildren(ctx)
 
 
@@ -89,6 +104,11 @@ class ExprVisitor(ParseTreeVisitor):
         return self.visitChildren(ctx)
 
 
+    # Visit a parse tree produced by ExprParser#expr_list.
+    def visitExpr_list(self, ctx:ExprParser.Expr_listContext):
+        return self.visitChildren(ctx)
+
+
     # Visit a parse tree produced by ExprParser#expression.
     def visitExpression(self, ctx:ExprParser.ExpressionContext):
         return self.visitChildren(ctx)
@@ -131,6 +151,16 @@ class ExprVisitor(ParseTreeVisitor):
 
     # Visit a parse tree produced by ExprParser#cUnary.
     def visitCUnary(self, ctx:ExprParser.CUnaryContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by ExprParser#tPostFix.
+    def visitTPostFix(self, ctx:ExprParser.TPostFixContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by ExprParser#cPostFix.
+    def visitCPostFix(self, ctx:ExprParser.CPostFixContext):
         return self.visitChildren(ctx)
 
 

@@ -17,12 +17,21 @@ class ExprListener(ParseTreeListener):
         pass
 
 
-    # Enter a parse tree produced by ExprParser#function.
-    def enterFunction(self, ctx:ExprParser.FunctionContext):
+    # Enter a parse tree produced by ExprParser#funcDef.
+    def enterFuncDef(self, ctx:ExprParser.FuncDefContext):
         pass
 
-    # Exit a parse tree produced by ExprParser#function.
-    def exitFunction(self, ctx:ExprParser.FunctionContext):
+    # Exit a parse tree produced by ExprParser#funcDef.
+    def exitFuncDef(self, ctx:ExprParser.FuncDefContext):
+        pass
+
+
+    # Enter a parse tree produced by ExprParser#funcDecl.
+    def enterFuncDecl(self, ctx:ExprParser.FuncDeclContext):
+        pass
+
+    # Exit a parse tree produced by ExprParser#funcDecl.
+    def exitFuncDecl(self, ctx:ExprParser.FuncDeclContext):
         pass
 
 
@@ -32,6 +41,24 @@ class ExprListener(ParseTreeListener):
 
     # Exit a parse tree produced by ExprParser#intType.
     def exitIntType(self, ctx:ExprParser.IntTypeContext):
+        pass
+
+
+    # Enter a parse tree produced by ExprParser#param_list.
+    def enterParam_list(self, ctx:ExprParser.Param_listContext):
+        pass
+
+    # Exit a parse tree produced by ExprParser#param_list.
+    def exitParam_list(self, ctx:ExprParser.Param_listContext):
+        pass
+
+
+    # Enter a parse tree produced by ExprParser#temp_stmt.
+    def enterTemp_stmt(self, ctx:ExprParser.Temp_stmtContext):
+        pass
+
+    # Exit a parse tree produced by ExprParser#temp_stmt.
+    def exitTemp_stmt(self, ctx:ExprParser.Temp_stmtContext):
         pass
 
 
@@ -152,6 +179,15 @@ class ExprListener(ParseTreeListener):
         pass
 
 
+    # Enter a parse tree produced by ExprParser#expr_list.
+    def enterExpr_list(self, ctx:ExprParser.Expr_listContext):
+        pass
+
+    # Exit a parse tree produced by ExprParser#expr_list.
+    def exitExpr_list(self, ctx:ExprParser.Expr_listContext):
+        pass
+
+
     # Enter a parse tree produced by ExprParser#expression.
     def enterExpression(self, ctx:ExprParser.ExpressionContext):
         pass
@@ -230,6 +266,24 @@ class ExprListener(ParseTreeListener):
 
     # Exit a parse tree produced by ExprParser#cUnary.
     def exitCUnary(self, ctx:ExprParser.CUnaryContext):
+        pass
+
+
+    # Enter a parse tree produced by ExprParser#tPostFix.
+    def enterTPostFix(self, ctx:ExprParser.TPostFixContext):
+        pass
+
+    # Exit a parse tree produced by ExprParser#tPostFix.
+    def exitTPostFix(self, ctx:ExprParser.TPostFixContext):
+        pass
+
+
+    # Enter a parse tree produced by ExprParser#cPostFix.
+    def enterCPostFix(self, ctx:ExprParser.CPostFixContext):
+        pass
+
+    # Exit a parse tree produced by ExprParser#cPostFix.
+    def exitCPostFix(self, ctx:ExprParser.CPostFixContext):
         pass
 
 
