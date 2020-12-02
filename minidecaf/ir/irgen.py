@@ -61,28 +61,64 @@ class StackIRGen(ExprVisitor):
     #     if var is not None:
     #         self._offtable[var] = self._top
     #     return self._top
-    
+    def doGlobalInitializer(self, ctx:ExprParser.ExpressionContext):
+        if ctx is None:
+            return None
+        try:
+            init = eval(text(ctx), {}, {})
+            return init
+        except:
+            raise ExprLocatedError(ctx, f"global variable must be constant")
+    def visitGlobDecl(self, ctx:ExprParser.GlobDeclContext):
+        #print("visitGlobDecl")
+        ctx = ctx.declaration()
+        init = self.doGlobalInitializer(ctx.expression())
+        ident = text(ctx.Identifier())
+        if ident in self._functionManager.paramInfos:
+            raise ExprLocatedError(ctx, f"conflict global variable and function {func}")
+        var = Variables(ident, None)
+        globInfo = GlobalInfo(INT_SIZE, var, init)
+        if ident in self._varstack.peek():
+            prevVar = self._varstack[ident]
+            prevGlobalInfo = self._functionManager.globalInfos[prevVar]
+            if prevGlobalInfo.init is not None:
+                if globInfo is not None:
+                    raise ExprLocatedError(ctx, f"redefinition of variable {ident}")
+            elif globInfo is not None:
+                self._functionManager.globalInfos[preVar].init = init
+        else:
+            self._varstack[ident] = var
+            self._functionManager.globalInfos[var] = globInfo
+        self._E.emitGlobalInfo(globInfo)
     def visitFuncDef(self, ctx:ExprParser.FuncDefContext):
         func_name = text(ctx.Identifier())
         if func_name in self._functionManager.functions:
-            raise ExprLocatedError(f"redefinition of function {func}")
+            raise ExprLocatedError(ctx, f"redefinition of function {func}")
+        for var, value in self._functionManager.globalInfos.items():
+            if func_name == var.ident:
+                raise ExprLocatedError(ctx, f"conflict global variable and function {func_name}")  
         self.newBlock(ctx)
         paramInfo = ParamInfo(ctx.param_list().accept(self))
         if func_name in self._functionManager.paramInfos:
             if not self._functionManager.paramInfos[func_name].compatible(paramInfo):
-                raise ExprLocatedError(f"conflicting types for {func}")
+                raise ExprLocatedError(ctx, f"conflicting types for {func}")
         self._functionManager.enterfunction(func_name, paramInfo)
         self._E.enterfunction(func_name, paramInfo)
         ctx.temp_stmt().accept(self)
         self.popBlock(ctx)
         self._E.exitfunction()
     def visitFuncDecl(self, ctx:ExprParser.FuncDeclContext):
+        #print("in func decl")
         func_name = text(ctx.Identifier())
+        #print(f"func name: {func_name}")
+        for var, value in self._functionManager.globalInfos.items():
+            if func_name == var.ident:
+                raise ExprLocatedError(ctx, f"conflict global variable and function {func_name}")  
         self.newBlock(ctx)
         paramInfo = ParamInfo(ctx.param_list().accept(self))
         if func_name in self._functionManager.paramInfos:
             if not self._functionManager.paramInfos[func_name].compatible(paramInfo):
-                raise ExprLocatedError(f"conflicting types for {func}")
+                raise ExprLocatedError(ctx, f"conflicting types for {func}")
         elif func_name not in self._functionManager.paramInfos:
             self._functionManager.paramInfos[func_name] = paramInfo
         self.popBlock(ctx)
@@ -227,13 +263,18 @@ class StackIRGen(ExprVisitor):
         self._E(instr.Branch("br", self._labelCounter.getLabel("continue_Label")))
 
     def visitAtomIdentifier(self, ctx:ExprParser.AtomIdentifierContext):
+        #print("AtomIdentifier")
         ident = ctx.Identifier()
+        #print(f"ident: {ident}")
         var = self.getVar(ctx, ident)
         off = var.offset
         #off = self.offset.getVar(var)
         #off = self._offtable[var]
         self._E(instr.Comment("frameaddress load"))
-        self._E(instr.FrameAddr(off))
+        if off is None:
+            self._E(instr.GlobalAddr(ident))
+        else:
+            self._E(instr.FrameAddr(off))
         self._E(instr.Load())
         self._E(instr.Comment("frameaddress load done"))
     
@@ -245,7 +286,10 @@ class StackIRGen(ExprVisitor):
         #off = self._offtable[var]
         #off = self.offset.getVar(var)
         self._E(instr.Comment("frameaddress store"))
-        self._E(instr.FrameAddr(off))
+        if off is None:
+            self._E(instr.GlobalAddr(ident))
+        else:
+            self._E(instr.FrameAddr(off))
         self._E(instr.Store())
         self._E(instr.Comment("frameaddress store done"))
         

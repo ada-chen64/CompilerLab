@@ -5,7 +5,7 @@ class Variables:
     _varcnt = {}
     def __init__(self, ident:str, offset:int):
         incorInit(Variables._varcnt, ident)
-        self.id = Variables._varcnt
+        self.id = Variables._varcnt[ident]
         self.ident = ident
         self.offset = offset
     def __eq__(self, other):
@@ -20,9 +20,20 @@ class Variables:
 
     def __hash__(self):
         return hash((self.ident, self.id, self.offset))
-class FunctionInfo:
-    def __init__(self):
-        self._v = {}
+class GlobalInfo:
+    def __init__(self, size:int, var:Variables, init=None):
+        self.var = var
+        self.size = size
+        self.init = init
+    def __str__(self):
+        return f"{self.var}, size={self.size}, init={self.initStr()}"
+    def initStr(self):
+        if init is None:
+            return f"uninitialized"
+        else:
+            return f"{self.init}"
+    def compatible(self, other):
+        return True
 class ParamInfo:
     def __init__(self, vars:[Variables]):
         self.vars = vars
@@ -35,6 +46,7 @@ class FunctionManager:
     def __init__(self):
         self.paramInfos = {}
         self.functions = []
+        self.globalInfos = {}
     def enterfunction(self, func_name: str,paramInfo: ParamInfo):
         self.paramInfos[func_name] = paramInfo
         self.functions.append(func_name)

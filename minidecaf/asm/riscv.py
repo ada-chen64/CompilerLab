@@ -101,6 +101,9 @@ def call(func:str, argnum:int):
 def ret(func:str):
     return [f"beqz x0, {func}_epilogue"]
 
+@Instrs
+def globaladdr(symbol:str):
+    return [f"addi sp, sp, -8", f"la t1, {symbol}", f"sw t1, 0(sp)"]
 
 
 class RISCVAsmGen:
@@ -159,6 +162,8 @@ class RISCVAsmGen:
                 func = f
                 break
         self._E(call(func.name, func.param.param_num))
+    def genGlobalAddr(self, instr:GlobalAddr):
+        self._E(globaladdr(instr.symbol))
     def genPrologue(self, funcname:str, param_num):
         self._E([
             AsmBlank(),
@@ -188,8 +193,21 @@ class RISCVAsmGen:
             pop("fp", "ra") + [
             AsmInstr("jr ra")
         ])
+    def genGlobalInfo(self, glob):
+        if glob.init is None:
+            self._E([AsmDirective(f".comm {glob.symbol},{glob.size},{glob.align}")])
+        else:
+            self._E([
+                AsmDirective(".data"),
+                AsmDirective(f".globl {glob.symbol}"),
+                AsmDirective(f".align {glob.align}"),
+                AsmDirective(f".size {glob.symbol}, {glob.size}"),
+                AsmLabel(f"{glob.symbol}"),
+                AsmDirective(f".quad {glob.init}")])
     def gen(self, ir):
         self.ir = ir
+        for glob in ir.globals:
+            self.genGlobalInfo(glob)
         for func in ir.funcs:
            # print(type(instr))
             self.genPrologue(f"{func.name}", func.param.param_num)
@@ -205,5 +223,6 @@ Binaries: RISCVAsmGen.genBinary, Equalities: RISCVAsmGen.genEqualities, \
 Relational : RISCVAsmGen.genRelational, Logical: RISCVAsmGen.genLogical, \
 Pop: RISCVAsmGen.genPop, Store: RISCVAsmGen.genStore, Load: RISCVAsmGen.genLoad, \
 FrameAddr: RISCVAsmGen.genFrameAddr, Label: RISCVAsmGen.genLabel, \
-Branch: RISCVAsmGen.genBranch, Comment: RISCVAsmGen.genComments, Call: RISCVAsmGen.genCall}
+Branch: RISCVAsmGen.genBranch, Comment: RISCVAsmGen.genComments, Call: RISCVAsmGen.genCall, \
+GlobalAddr: RISCVAsmGen.genGlobalAddr}
 

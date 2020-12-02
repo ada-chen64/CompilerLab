@@ -14,6 +14,16 @@ class ExprVisitor(ParseTreeVisitor):
         return self.visitChildren(ctx)
 
 
+    # Visit a parse tree produced by ExprParser#globFunc.
+    def visitGlobFunc(self, ctx:ExprParser.GlobFuncContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by ExprParser#globDecl.
+    def visitGlobDecl(self, ctx:ExprParser.GlobDeclContext):
+        return self.visitChildren(ctx)
+
+
     # Visit a parse tree produced by ExprParser#funcDef.
     def visitFuncDef(self, ctx:ExprParser.FuncDefContext):
         return self.visitChildren(ctx)

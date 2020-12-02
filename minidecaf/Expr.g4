@@ -4,8 +4,13 @@ import ExprLex;
 
 
 program
-    : function+ EOF 
+    : glob_stuff+ EOF 
     ;
+glob_stuff
+    : function #globFunc
+    | declaration ';' #globDecl
+    ;
+
 function 
     : typ Identifier '('param_list ')' '{' temp_stmt '}'  #funcDef
     | typ Identifier '('param_list ')' ';' #funcDecl

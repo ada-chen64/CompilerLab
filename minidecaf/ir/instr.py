@@ -57,7 +57,8 @@ class Logical(IRInstr):
         return logicsymbols[self.op]
 class FrameAddr(IRInstr):
     def __init__(self, fpOffset:int):
-        assert fpOffset < 0
+        if fpOffset is not None:
+            assert fpOffset < 0
         self.offset = fpOffset
     def __str__(self):
         return f"frameaddr {self.offset}"
@@ -98,3 +99,8 @@ class Call(IRInstr):
         self.func_name = func_name
     def __str__(self):
         return f"call {self.func_name}"
+class GlobalAddr(IRInstr):
+    def __init__(self, symbol):
+        self.symbol = symbol
+    def __str__(self):
+        return f"globaladdr {self.symbol}"

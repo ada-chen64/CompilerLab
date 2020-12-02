@@ -17,6 +17,24 @@ class ExprListener(ParseTreeListener):
         pass
 
 
+    # Enter a parse tree produced by ExprParser#globFunc.
+    def enterGlobFunc(self, ctx:ExprParser.GlobFuncContext):
+        pass
+
+    # Exit a parse tree produced by ExprParser#globFunc.
+    def exitGlobFunc(self, ctx:ExprParser.GlobFuncContext):
+        pass
+
+
+    # Enter a parse tree produced by ExprParser#globDecl.
+    def enterGlobDecl(self, ctx:ExprParser.GlobDeclContext):
+        pass
+
+    # Exit a parse tree produced by ExprParser#globDecl.
+    def exitGlobDecl(self, ctx:ExprParser.GlobDeclContext):
+        pass
+
+
     # Enter a parse tree produced by ExprParser#funcDef.
     def enterFuncDef(self, ctx:ExprParser.FuncDefContext):
         pass
