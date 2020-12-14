@@ -16,7 +16,8 @@ function
     | typ Identifier '('param_list ')' ';' #funcDecl
     ;
 typ
-    : Int #intType
+    : 'int' #intType
+    | typ '*' #ptrType
     ;
 param_list
     : (declaration (',' declaration)*)?
@@ -55,19 +56,20 @@ expression
     ;
 assignment
     : conditional #cAssign
-    | Identifier '=' expression #tAssign
+    | unary asgnOp expression #tAssign
     ;
 add
     : mult #addMult
-    | add ('+' | '-') mult #addOpMult
+    | add addOp mult #addOpMult
     ;
 mult
     : unary #multUnary
-    | mult (MulOp) unary #multOpUnary
+    | mult mulOp unary #multOpUnary
     ;
 unary
     : postfix #tUnary
-    | ('-'|'!'|'~') unary #cUnary
+    | unaryOp unary #cUnary
+    | '(' typ ')' unary #typUnary
     ;
 postfix
     : atom #tPostFix
@@ -99,11 +101,16 @@ relational
     : add #cRelational
     | relational (InEqOp) add #tRelational
     ;
-MulOp
+mulOp
     : '*' | '/' | '%';
 
 EqOp
     : '==' | '!=' ;
 InEqOp 
     : '<' | '>' |'<=' | '>=';
-
+unaryOp
+    : '-' | '!' | '~' | '*' | '&';
+addOp
+    : '+' | '-';
+asgnOp
+    : '=';

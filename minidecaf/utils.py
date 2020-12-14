@@ -7,6 +7,9 @@ eqsymbols = {'==' : 'eq', '!=' :'ne'}
 relatesymbols = {'<=' : 'le', '>=' : 'ge', '<' :'lt', '>':'gt'}
 logicsymbols = {'&&' : 'land', '||' : 'lor'}
 branchOp =['beqz', 'bnez', 'br', 'beq']
+
+
+
 class ExprError(Exception):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, *kwargs)
@@ -17,7 +20,10 @@ class ExprLocatedError(ExprError):
 
     def __str__(self):
         return self.msg
-        
+
+class ExprTypesError(ExprError):
+    pass
+
 def text(x):
     if x is not None:
         return str(x.getText())
@@ -38,6 +44,13 @@ def incorInit(d:dict, key, init=0):
         d[key] = init
 def noOp(*args, **kwargs):
     pass
+
+def expandIterableKey(d:list):
+    d2 = {}
+    for (keys, val) in d:
+        for key in keys:
+            d2[key] = val
+    return d2
 
 class stack_dict():
     def __init__(self):

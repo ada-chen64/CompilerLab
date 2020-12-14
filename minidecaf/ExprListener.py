@@ -53,6 +53,15 @@ class ExprListener(ParseTreeListener):
         pass
 
 
+    # Enter a parse tree produced by ExprParser#ptrType.
+    def enterPtrType(self, ctx:ExprParser.PtrTypeContext):
+        pass
+
+    # Exit a parse tree produced by ExprParser#ptrType.
+    def exitPtrType(self, ctx:ExprParser.PtrTypeContext):
+        pass
+
+
     # Enter a parse tree produced by ExprParser#intType.
     def enterIntType(self, ctx:ExprParser.IntTypeContext):
         pass
@@ -287,6 +296,15 @@ class ExprListener(ParseTreeListener):
         pass
 
 
+    # Enter a parse tree produced by ExprParser#typUnary.
+    def enterTypUnary(self, ctx:ExprParser.TypUnaryContext):
+        pass
+
+    # Exit a parse tree produced by ExprParser#typUnary.
+    def exitTypUnary(self, ctx:ExprParser.TypUnaryContext):
+        pass
+
+
     # Enter a parse tree produced by ExprParser#tPostFix.
     def enterTPostFix(self, ctx:ExprParser.TPostFixContext):
         pass
@@ -419,6 +437,42 @@ class ExprListener(ParseTreeListener):
 
     # Exit a parse tree produced by ExprParser#tRelational.
     def exitTRelational(self, ctx:ExprParser.TRelationalContext):
+        pass
+
+
+    # Enter a parse tree produced by ExprParser#mulOp.
+    def enterMulOp(self, ctx:ExprParser.MulOpContext):
+        pass
+
+    # Exit a parse tree produced by ExprParser#mulOp.
+    def exitMulOp(self, ctx:ExprParser.MulOpContext):
+        pass
+
+
+    # Enter a parse tree produced by ExprParser#unaryOp.
+    def enterUnaryOp(self, ctx:ExprParser.UnaryOpContext):
+        pass
+
+    # Exit a parse tree produced by ExprParser#unaryOp.
+    def exitUnaryOp(self, ctx:ExprParser.UnaryOpContext):
+        pass
+
+
+    # Enter a parse tree produced by ExprParser#addOp.
+    def enterAddOp(self, ctx:ExprParser.AddOpContext):
+        pass
+
+    # Exit a parse tree produced by ExprParser#addOp.
+    def exitAddOp(self, ctx:ExprParser.AddOpContext):
+        pass
+
+
+    # Enter a parse tree produced by ExprParser#asgnOp.
+    def enterAsgnOp(self, ctx:ExprParser.AsgnOpContext):
+        pass
+
+    # Exit a parse tree produced by ExprParser#asgnOp.
+    def exitAsgnOp(self, ctx:ExprParser.AsgnOpContext):
         pass
 
 

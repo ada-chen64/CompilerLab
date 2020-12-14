@@ -1,5 +1,6 @@
 from . import *
 from .funcmanage import *
+from .typer import *
 import sys
 sys.path.append('..')
 from ..utils import *
@@ -31,8 +32,9 @@ class LabelCounter:
     def getLabel(self, lab= "LABEL"):
         return f"{lab}{self._labels[lab]}"
 class StackIRGen(ExprVisitor):
-    def __init__(self, emitter:IREmitter):
+    def __init__(self, emitter:IREmitter, typeInfo):
         self._E = emitter
+        self.typeInfo = typeInfo
         # self._offtable = {}
         # self._top = 0
         self._functionManager = FunctionManager()
@@ -55,12 +57,7 @@ class StackIRGen(ExprVisitor):
         self._frameSlots.pop()
         return slots_to_release
         #self.offset = OffsetManage()
-    # def addVar(self, var=None):
-    #     assert var not in self._offtable
-    #     self._top -= INT_SIZE
-    #     if var is not None:
-    #         self._offtable[var] = self._top
-    #     return self._top
+    
     def doGlobalInitializer(self, ctx:ExprParser.ExpressionContext):
         if ctx is None:
             return None
@@ -151,7 +148,7 @@ class StackIRGen(ExprVisitor):
         else:
             self._E(instr.Const(0))
         if text(ident) in self._varstack.peek():
-            raise ExprLocatedError(ctx, f"redefinition of {var}")
+            raise ExprLocatedError(ctx, f"redefinition of {text(ident)}")
         self.decVar(ctx, ident)
         #self.offset.addVar(var)
         
@@ -270,43 +267,71 @@ class StackIRGen(ExprVisitor):
         off = var.offset
         #off = self.offset.getVar(var)
         #off = self._offtable[var]
-        self._E(instr.Comment("frameaddress load"))
         if off is None:
             self._E(instr.GlobalAddr(ident))
         else:
             self._E(instr.FrameAddr(off))
-        self._E(instr.Load())
-        self._E(instr.Comment("frameaddress load done"))
-    
+            self._E(instr.Comment("frameaddress load done"))
+        if not isinstance(self.typeInfo[ctx], ArrayType):
+            self._E(instr.Load())
+        
+    def computeLValue(self, lvalue):
+        if isinstance(lvalue,ExprParser.TUnaryContext):
+            return self.computeLValue(lvalue.postfix())
+        if isinstance(lvalue, ExprParser.TPostFixContext):
+            return self.computeLValue(lvalue.atom())
+        if isinstance(lvalue, ExprParser.AtomIdentifierContext):
+            #identifier = expression
+            ident = lvalue.Identifier()
+            var = self.getVar(lvalue, ident)
+            off = var.offset
+            if off is None:
+                self._E(instr.GlobalAddr(ident))
+            else:
+                self._E(instr.Comment("frameaddress store"))
+                self._E(instr.FrameAddr(off))
+            return
+        elif isinstance(lvalue, ExprParser.AtomParenContext):
+            return self.computeLValue(lvalue.expression())
+        raise ExprLocatedError(lvalue, f"{text(lvalue)} is not an lvalue")
+    def emitLoc(self, ctx):
+        locs = self.typeInfo.lvalueLoc(ctx)
+        for loc in locs:
+            if isinstance(loc, IRInstr):
+                self._E(loc)
+            else:
+                loc.accept(self)
     def visitTAssign(self, ctx:ExprParser.TAssignContext):
-        self.visitChildren(ctx)
-        ident = ctx.Identifier()
-        var = self.getVar(ctx, ident)
-        off = var.offset
-        #off = self._offtable[var]
-        #off = self.offset.getVar(var)
-        self._E(instr.Comment("frameaddress store"))
-        if off is None:
-            self._E(instr.GlobalAddr(ident))
-        else:
-            self._E(instr.FrameAddr(off))
+        ctx.expression().accept(self)
+        self.emitLoc(ctx.unary())
         self._E(instr.Store())
         self._E(instr.Comment("frameaddress store done"))
         
 
     def visitCUnary(self, ctx:ExprParser.UnaryContext):
         #print("visit expression")
-        self.visitChildren(ctx)
+        op = text(ctx.unaryOp())
+        if op == '&':
+            self.emitLoc(ctx.unary())
+        else: 
+            self.visitChildren(ctx)
+            if op == '*':
+                self._E(instr.Load())
+            elif op == '~':
+                self._E(instr.Not())
+            elif op == '-':
+                self._E(instr.Neg())
+            elif op == '!':
+                self._E(instr.LNOT())
+        # self.visitChildren(ctx)
+        # sym = text(ctx.unaryOp())
         
-        if(ctx.Not()):
-            sym = text(ctx.Not())
-            self._E(instr.Not())
-        if(ctx.Sub()):
-            sym = text(ctx.Sub())
-            self._E(instr.Neg())
-        if(ctx.LNot()):
-            sym = text(ctx.LNot())
-            self._E(instr.LNOT())
+        # if sym == '~':
+        #     self._E(instr.Not())
+        # if sym == '-':
+        #     self._E(instr.Neg())
+        # if sym == '!':
+        #     self._E(instr.LNOT())
        
     def visitFunction(self, ctx:ExprParser.FunctionContext):
         func_name = text(ctx.Identifier())
@@ -317,19 +342,38 @@ class StackIRGen(ExprVisitor):
         v = int(text(ctx.Integer()))
         #print(v)
         self._E(instr.Const(v))
+    def _addExpr(self, ctx, op, lhs, rhs):
+        if isinstance(self.typeInfo[lhs], PtrType):
+            sz = self.typeInfo[lhs].sizeof()
+            if isinstance(self.typeInfo[rhs], PtrType): # ptr - ptr
+                lhs.accept(self)
+                rhs.accept(self)
+                self._E(instr.Binaries(op))
+                self._E(instr.Const(sz))
+                self._E(instr.Binaries('/'))
+            else: # ptr +- int
+                lhs.accept(self)
+                rhs.accept(self)
+                self._E(instr.Const(sz))
+                self._E(instr.Binaries('*'))
+                self._E(instr.Binary(op))
+        else:
+            sz = self.typeInfo[rhs].sizeof()
+            if isinstance(self.typeInfo[rhs], PtrType): # int +- ptr
+                lhs.accept(self)
+                self._E(instr.Const(sz))
+                self._E(instr.Binaries('*'))
+                rhs.accept(self)
+                self._E(instr.Binaries(op))
+            else: # int +- int
+                self.visitChildren(ctx)
+                self._E(instr.Binaries(op))
     def visitAddOpMult(self, ctx:ExprParser.AddOpMultContext):
-        self.visitChildren(ctx)
-        if(ctx.Add()):
-            op = text(ctx.Add())
-        if(ctx.Sub()):
-            op = text(ctx.Sub())
-        self._E(instr.Comment("binaries begin"))
-        self._E(instr.Binaries(op))
-        self._E(instr.Comment("binaries end"))
+        self._addExpr(ctx, text(ctx.addOp()), ctx.add(), ctx.mult())
         #print(op)
     def visitMultOpUnary(self, ctx:ExprParser.MultOpUnaryContext):
         self.visitChildren(ctx)
-        op = text(ctx.MulOp())
+        op = text(ctx.mulOp())
         self._E(instr.Binaries(op))
         #print(op)
     

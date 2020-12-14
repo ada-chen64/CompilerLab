@@ -1,5 +1,14 @@
 from .instr import IRInstr
+from .typer import Typer
 from .funcmanage import ParamInfo, GlobalInfo
+
+ 
+def typecheck(tree):
+    typer = Typer()
+    typer.visit(tree)
+    return typer.typeInfo
+
+
 class IRFunc:
     def __init__(self, name:str, param:ParamInfo, instrs:[IRInstr]):
         self.name = name

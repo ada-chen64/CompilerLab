@@ -6,7 +6,7 @@ from antlr4.error.ErrorListener import ErrorListener
 from .ExprLexer import ExprLexer
 from .ExprParser import ExprParser
 from .ExprVisitor import ExprVisitor
-from .ir import IREmitter
+from .ir import IREmitter, typecheck
 from .ir.irgen import StackIRGen
 from .asm import AsmEmitter
 from .asm.riscv import RISCVAsmGen as AsmGen
@@ -25,9 +25,11 @@ def parseArgs(argv):
     parser.add_argument("-ir", action="store_true", help="emit ir rather than asm")
     return parser.parse_args()
 
-def irGenerator(tree):
+def typeChecker(tree):
+        return typecheck(tree)
+def irGenerator(tree, typeInfo):
         irEmitter = IREmitter()
-        StackIRGen(irEmitter).visit(tree)
+        StackIRGen(irEmitter, typeInfo).visit(tree)
         return irEmitter.getIR()
 def asmGenerator(ir, outfile):
         asmEmitter = AsmEmitter(outfile)
@@ -46,8 +48,8 @@ def main():
         tree = parser.program()
         #print(tree.toStringTree(recog=parser))
         # print(tree.accept(visitor))
-
-        ir = irGenerator(tree)
+        typeInfo = typeChecker(tree)
+        ir = irGenerator(tree, typeInfo)
 
         # for instr in ir.instrs:
         #         print(instr)

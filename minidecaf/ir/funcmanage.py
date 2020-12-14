@@ -44,9 +44,9 @@ class ParamInfo:
         return self.param_num == other.param_num
 class FunctionManager:
     def __init__(self):
-        self.paramInfos = {}
-        self.functions = []
-        self.globalInfos = {}
+        self.paramInfos = {} #func name -> ParamInfo
+        self.functions = [] #list of func names
+        self.globalInfos = {} #Variable -> GlobalInfo
     def enterfunction(self, func_name: str,paramInfo: ParamInfo):
         self.paramInfos[func_name] = paramInfo
         self.functions.append(func_name)

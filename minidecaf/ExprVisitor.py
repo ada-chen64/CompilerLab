@@ -34,6 +34,11 @@ class ExprVisitor(ParseTreeVisitor):
         return self.visitChildren(ctx)
 
 
+    # Visit a parse tree produced by ExprParser#ptrType.
+    def visitPtrType(self, ctx:ExprParser.PtrTypeContext):
+        return self.visitChildren(ctx)
+
+
     # Visit a parse tree produced by ExprParser#intType.
     def visitIntType(self, ctx:ExprParser.IntTypeContext):
         return self.visitChildren(ctx)
@@ -164,6 +169,11 @@ class ExprVisitor(ParseTreeVisitor):
         return self.visitChildren(ctx)
 
 
+    # Visit a parse tree produced by ExprParser#typUnary.
+    def visitTypUnary(self, ctx:ExprParser.TypUnaryContext):
+        return self.visitChildren(ctx)
+
+
     # Visit a parse tree produced by ExprParser#tPostFix.
     def visitTPostFix(self, ctx:ExprParser.TPostFixContext):
         return self.visitChildren(ctx)
@@ -236,6 +246,26 @@ class ExprVisitor(ParseTreeVisitor):
 
     # Visit a parse tree produced by ExprParser#tRelational.
     def visitTRelational(self, ctx:ExprParser.TRelationalContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by ExprParser#mulOp.
+    def visitMulOp(self, ctx:ExprParser.MulOpContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by ExprParser#unaryOp.
+    def visitUnaryOp(self, ctx:ExprParser.UnaryOpContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by ExprParser#addOp.
+    def visitAddOp(self, ctx:ExprParser.AddOpContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by ExprParser#asgnOp.
+    def visitAsgnOp(self, ctx:ExprParser.AsgnOpContext):
         return self.visitChildren(ctx)
 
 

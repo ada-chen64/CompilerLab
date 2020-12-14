@@ -13,9 +13,6 @@ Colon: ':';
 // 运算符
 Add: '+';
 Sub: '-';
-Mul: '*';
-Div: '/';
-Mod: '%';
 LNot: '!';
 Not: '~';
 LOr: '||';
