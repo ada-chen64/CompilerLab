@@ -323,15 +323,6 @@ class StackIRGen(ExprVisitor):
                 self._E(instr.Neg())
             elif op == '!':
                 self._E(instr.LNOT())
-        # self.visitChildren(ctx)
-        # sym = text(ctx.unaryOp())
-        
-        # if sym == '~':
-        #     self._E(instr.Not())
-        # if sym == '-':
-        #     self._E(instr.Neg())
-        # if sym == '!':
-        #     self._E(instr.LNOT())
        
     def visitFunction(self, ctx:ExprParser.FunctionContext):
         func_name = text(ctx.Identifier())

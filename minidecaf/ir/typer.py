@@ -8,9 +8,9 @@ from ..ExprParser import ExprParser
 from ..ExprVisitor import ExprVisitor
 class TypeInfo:
     def __init__(self):
-        self.loc = {} # ExprContext -> (IRInstr|ExprContext)+
+        self.loc = {} # ctx -> (IRInstr|ctx)+
         self.funcs = {} # str -> FuncTypeInfo
-        self._t = {} # ExprContext -> Type
+        self._t = {} # ctx -> Type
 
     def lvalueLoc(self, ctx):
         return self.loc[ctx]

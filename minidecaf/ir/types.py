@@ -37,7 +37,7 @@ class PtrType(Type):
             return False
         return other.basetype == self.basetype
     def sizeof(self):
-        return INT_BYTES
+        return INT_SIZE
 
 class ArrayType(Type):
     def __init__(self, base:Type, len:int):
