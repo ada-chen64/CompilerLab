@@ -15,16 +15,16 @@ def Instrs(f):
 @Instrs
 def _push(val):
     if type(val) is int:
-        return [f"addi sp, sp, -8", f"li t1, {val}", f"sw t1, 0(sp)"] #push integer
+        return [f"addi sp, sp, -{INT_SIZE}", f"li t1, {val}", f"sw t1, 0(sp)"] #push integer
     else:
-        return [f"addi sp, sp, -8", f"sw {val}, 0(sp)"] # push register
+        return [f"addi sp, sp, -{INT_SIZE}", f"sw {val}, 0(sp)"] # push register
 def push(*vals):
     return flatten(map(_push, vals))
 @Instrs
 def _pop(reg):
     if reg is None:
-        return [f"addi sp, sp, 8"]
-    return ([f"lw {reg}, 0(sp)"] if reg is not None else []) + [f"addi sp, sp, 8"]
+        return [f"addi sp, sp, {INT_SIZE}"]
+    return ([f"lw {reg}, 0(sp)"] if reg is not None else []) + [f"addi sp, sp, {INT_SIZE}"]
 def pop(*regs):
     return flatten(map(_pop, regs))
 
@@ -83,10 +83,15 @@ def logical(op):
 
 @Instrs
 def branch(op, label:str):
-    if op is 'br':
-        return [f"j {label}"]
-    else:
-        return pop("t1") + [f"{op} t1, {label}"]
+    b1 = { "br": (2, "beq"), "beqz": (1, "beq"), "bnez": (1, "bne") }
+    if op in b1:
+        naux, op = b1[op]
+        return push(*[0]*naux) + branch(op, label)
+    return pop("t2", "t1") + [f"{op} t1, t2, {label}"]
+    # if op is 'br':
+    #     return [f"j {label}"]
+    # else:
+    #     return pop("t1") + [f"{op} t1, {label}"]
 
 
 @Instrs
@@ -103,15 +108,16 @@ def ret(func:str):
 
 @Instrs
 def globaladdr(symbol:str):
-    return [f"addi sp, sp, -8", f"la t1, {symbol}", f"sw t1, 0(sp)"]
+    return [f"addi sp, sp, -{INT_SIZE}", f"la t1, {symbol}", f"sw t1, 0(sp)"]
 
 
 class RISCVAsmGen:
     def __init__(self, emitter):
         self._E = emitter
+        self._curfunc = None
 
     def genRet(self, instr:Ret):
-        self._E(ret("main"))
+        self._E(ret(self._curfunc))
 
     def genConst(self, instr:Const):
         self._E(push(instr.v))
@@ -175,7 +181,7 @@ class RISCVAsmGen:
             AsmInstr("mv fp, sp"),
             AsmComment("copy args:")])
         for i in range(param_num):
-            fr, to = 8*(i+2), -8*(i+1)
+            fr, to = INT_SIZE*(i+2), -INT_SIZE*(i+1)
             self._E([
                 AsmInstr(f"lw t1, {fr}(fp)")] +
                 push("t1"))
@@ -210,6 +216,7 @@ class RISCVAsmGen:
             self.genGlobalInfo(glob)
         for func in ir.funcs:
            # print(type(instr))
+            self._curfunc = func.name
             self.genPrologue(f"{func.name}", func.param.param_num)
             for instr in func.instrs:
                 if type(instr) is not Comment:

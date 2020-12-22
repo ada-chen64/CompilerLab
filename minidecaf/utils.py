@@ -1,7 +1,7 @@
 from copy import deepcopy
 MAX_INT = 2**31 - 1
 MIN_INT = -2**31
-INT_SIZE = 8
+INT_SIZE = 4
 binsymbols = {'+': 'add', '-': 'sub','*': 'mul', '/': 'div', '%': 'rem'}
 eqsymbols = {'==' : 'eq', '!=' :'ne'}
 relatesymbols = {'<=' : 'le', '>=' : 'ge', '<' :'lt', '>':'gt'}
@@ -21,7 +21,7 @@ class ExprLocatedError(ExprError):
     def __str__(self):
         return self.msg
 
-class ExprTypesError(ExprError):
+class ExprTypesError(ExprLocatedError):
     pass
 
 def text(x):
@@ -51,6 +51,11 @@ def expandIterableKey(d:list):
         for key in keys:
             d2[key] = val
     return d2
+def product(l:list):
+    p = 1
+    for n in l:
+        p*= n
+    return p
 
 class stack_dict():
     def __init__(self):

@@ -3,14 +3,15 @@ sys.path.append('..')
 from ..utils import *
 class Variables:
     _varcnt = {}
-    def __init__(self, ident:str, offset:int):
+    def __init__(self, ident:str, offset:int, size:INT_SIZE):
         incorInit(Variables._varcnt, ident)
         self.id = Variables._varcnt[ident]
         self.ident = ident
         self.offset = offset
+        self.size = size
     def __eq__(self, other):
         return self.id == other.id and self.ident == other.ident and\
-            self.offset == other.offset
+            self.offset == other.offset and self.size == self.size
 
     def __str__(self):
         return f"{self.ident}({self.id})"
@@ -19,7 +20,7 @@ class Variables:
         return self.__str__()
 
     def __hash__(self):
-        return hash((self.ident, self.id, self.offset))
+        return hash((self.ident, self.id, self.offset, self.size))
 class GlobalInfo:
     def __init__(self, size:int, var:Variables, init=None):
         self.var = var

@@ -78,9 +78,9 @@ class Typer(ExprVisitor):
         self._curFrameSlot = 0 #frame slots used for THIS block
         self._varstack = stack_dict() #dict entry for each block
         self.locator = Locator(self.typeInfo)
-    def decVar(self, ctx, ident):
-        self._curFrameSlot += 1
-        self._varstack[text(ident)] = Variables(text(ident), -INT_SIZE * self._curFrameSlot)
+    def decVar(self, ctx, ident, numInts=1):
+        self._curFrameSlot += numInts
+        self._varstack[text(ident)] = Variables(text(ident), -INT_SIZE * self._curFrameSlot, INT_SIZE * numInts)
     def getVar(self, ctx, ident):
         return self._varstack[text(ident)]
     def newBlock(self, ctx):
@@ -94,25 +94,35 @@ class Typer(ExprVisitor):
         return slots_to_release
     def _getdecltype(self, ctx):
         basetype = ctx.typ().accept(self)
-        return basetype
+        dims = [int(text(x)) for x in reversed(ctx.Integer())]
+        if len(dims) == 0:
+            return basetype
+        else:
+            return ArrayType.make(basetype, dims)
     def _getargType(self,ctx:ExprParser.Expr_listContext):
         args = list(map(lambda x: x.accept(self), ctx.expression()))
         #print(args)
         return args
-    def _getdeclType(self, ctx):
-        return ctx.typ().accept(self)
+    def getVarsize(self, ctx:ExprParser.DeclarationContext):
+        size = product([int(text(x)) for x in ctx.Integer()])
+        if size <= 0:
+            raise ExprLocatedError(ctx, f"array size cannot be zero")
+        if size > MAX_INT:
+            raise ExprLocatedError(ctx, f"array size too big")
+        return size
     def _getparamType(self, ctx:ExprParser.Param_listContext):
         typs = []
         for decl in ctx.declaration():
             if decl.expression() is not None:
                 raise ExprLocatedError(decl, f"Parameter cannot be initialized")
-            paramType = self._getdeclType(decl)
+            paramType = self._getdecltype(decl)
             if isinstance(paramType, ArrayType):
                 raise ExprLocatedError(decl, f"Parameter cannot be ArrayType")
             typs += [paramType]
         #print("paramtypes: ",typs)
         return typs
     def _getfuncTypeInfo(self, ctx):
+        #print("getting func type")
         retType = ctx.typ().accept(self)
         paramType = self._getparamType(ctx.param_list())
         return FuncTypeInfo(retType, paramType)
@@ -124,6 +134,7 @@ class Typer(ExprVisitor):
         ])[op]
         return rule(ctx, ty)
     def checkBinary(self, ctx, op:str, lhs:Type, rhs:Type):
+        #print(op)
         rule = expandIterableKey([
             (['*', '/', '%', '&&', '||'],    intBinOpRule),
             (['==', '!='],                         eqRule),
@@ -164,8 +175,8 @@ class Typer(ExprVisitor):
         ident = text(ctx.Identifier())
         if ident in self._functionManager.paramInfos:
             raise ExprLocatedError(ctx, f"conflict global variable and function {func}")
-        var = Variables(ident, None)
-        globInfo = GlobalInfo(INT_SIZE, var, init)
+        var = Variables(ident, None, INT_SIZE * self.getVarsize(ctx))
+        globInfo = GlobalInfo(INT_SIZE * self.getVarsize(ctx), var, init)
         if ident in self._varstack.peek():
             prevVar = self._varstack[ident]
             prevGlobalInfo = self._functionManager.globalInfos[prevVar]
@@ -195,7 +206,7 @@ class Typer(ExprVisitor):
             asgnRule(ctx, typ, initType)
         if text(ident) in self._varstack.peek():
             raise ExprLocatedError(ctx, f"redefinition of {text(ident)}")
-        self.decVar(ctx, ident)
+        self.decVar(ctx, ident, self.getVarsize(ctx))
         var = self._varstack[text(ident)]
         self._vartype[var] = typ
         return typ
@@ -210,9 +221,9 @@ class Typer(ExprVisitor):
         else:
             self.typeInfo.funcs[func] = funcTypeInfo
     def visitFuncDef(self, ctx:ExprParser.FuncDefContext):
-        #print("in func def")
-        func_name = text(ctx.Identifier())
         
+        func_name = text(ctx.Identifier())
+        #print(f"in func def: {func_name}")
         self._curFunc = func_name
         if func_name in self._functionManager.functions:
             raise ExprLocatedError(ctx, f"redefinition of function {func}")
@@ -262,13 +273,16 @@ class Typer(ExprVisitor):
     
     @SaveType
     def visitTypUnary(self, ctx:ExprParser.TypUnaryContext):
+        typ = ctx.typ().accept(self)
+        #print(typ)
         ctx.unary().accept(self)
-        return ctx.typ().accept(self)
+        return typ
     @SaveType
     def visitAtomParen(self, ctx:ExprParser.AtomParenContext):
         return ctx.expression().accept(self)
     @SaveType
     def visitCUnary(self, ctx:ExprParser.CUnaryContext):
+        #print(text(ctx.unaryOp()))
         res = self.checkUnary(ctx.unaryOp(), text(ctx.unaryOp()), ctx.unary().accept(self))
         if text(ctx.unaryOp()) == '&':
             self.locate(ctx.unary())
@@ -276,30 +290,37 @@ class Typer(ExprVisitor):
     #check Binaries
     @SaveType
     def visitAddOpMult(self, ctx:ExprParser.AddOpMultContext):
+        #print("addopMult")
         return self.checkBinary(ctx.addOp(), text(ctx.addOp()), 
                 ctx.add().accept(self), ctx.mult().accept(self))
     @SaveType
     def visitMultOpUnary(self, ctx:ExprParser.MultOpUnaryContext):
+        #print("multopUnary")
         return self.checkBinary(ctx.mulOp(), text(ctx.mulOp()),
                 ctx.mult().accept(self), ctx.unary().accept(self))
     @SaveType
     def visitTRelational(self, ctx:ExprParser.TRelationalContext):
+        #print("trelational")
         return self.checkBinary(ctx.InEqOp(), text(ctx.InEqOp()),
                 ctx.relational().accept(self), ctx.add().accept(self))
     @SaveType
     def visitTEquality(self, ctx:ExprParser.TEqualityContext):
+        #print("tequality")
         return self.checkBinary(ctx.EqOp(), text(ctx.EqOp()),
                 ctx.equality().accept(self), ctx.relational().accept(self))
     @SaveType
     def visitTLog_or(self, ctx:ExprParser.TLog_orContext):
+        #print("tlog_or")
         return self.checkBinary(ctx, '||', ctx.logical_or().accept(self),
                 ctx.logical_and().accept(self))
     @SaveType
     def visitTLog_and(self, ctx:ExprParser.TLog_andContext):
+        #print("tlog_and")
         return self.checkBinary(ctx, '&&', ctx.logical_and().accept(self),
                 ctx.equality().accept(self))
     @SaveType
     def visitTAssign(self, ctx:ExprParser.TAssignContext):
+        #print("tassign")
         res = self.checkBinary(ctx.asgnOp(), text(ctx.asgnOp()),
             ctx.unary().accept(self),ctx.expression().accept(self))
         self.locate(ctx.unary())
@@ -313,6 +334,7 @@ class Typer(ExprVisitor):
         return IntType()
     @SaveType
     def visitAtomIdentifier(self, ctx:ExprParser.AtomIdentifierContext):
+        #print(text(ctx.Identifier()))
         var = self._varstack[text(ctx.Identifier())]
         return self._vartype[var]
     @SaveType
@@ -321,6 +343,9 @@ class Typer(ExprVisitor):
         func = text(ctx.Identifier())
         rule = self.typeInfo.funcs[func].call()
         return rule(ctx, argType)
+    @SaveType
+    def visitAPostFix(self, ctx:ExprParser.APostFixContext):
+        return arrayRule(ctx, ctx.postfix().accept(self), ctx.expression().accept(self))
     
     def visitReturnStmt(self, ctx:ExprParser.ReturnStmtContext):
         expectedType = self.typeInfo.funcs[self._curFunc].retType
@@ -371,3 +396,8 @@ class Locator(ExprVisitor):
             return [ctx.unary()]
     def visitAtomParen(self, ctx:ExprParser.AtomParenContext):
         return ctx.expression().accept(self)
+
+    def visitAPostFix(self, ctx:ExprParser.APostFixContext):
+        fixupMult = self.typeInfo[ctx.postfix()].basetype.sizeof()
+        return [ctx.postfix(), ctx.expression(), instr.Const(fixupMult), 
+            instr.Binaries('*'), instr.Binaries('+')]

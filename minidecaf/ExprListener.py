@@ -305,21 +305,30 @@ class ExprListener(ParseTreeListener):
         pass
 
 
-    # Enter a parse tree produced by ExprParser#tPostFix.
-    def enterTPostFix(self, ctx:ExprParser.TPostFixContext):
-        pass
-
-    # Exit a parse tree produced by ExprParser#tPostFix.
-    def exitTPostFix(self, ctx:ExprParser.TPostFixContext):
-        pass
-
-
     # Enter a parse tree produced by ExprParser#cPostFix.
     def enterCPostFix(self, ctx:ExprParser.CPostFixContext):
         pass
 
     # Exit a parse tree produced by ExprParser#cPostFix.
     def exitCPostFix(self, ctx:ExprParser.CPostFixContext):
+        pass
+
+
+    # Enter a parse tree produced by ExprParser#aPostFix.
+    def enterAPostFix(self, ctx:ExprParser.APostFixContext):
+        pass
+
+    # Exit a parse tree produced by ExprParser#aPostFix.
+    def exitAPostFix(self, ctx:ExprParser.APostFixContext):
+        pass
+
+
+    # Enter a parse tree produced by ExprParser#tPostFix.
+    def enterTPostFix(self, ctx:ExprParser.TPostFixContext):
+        pass
+
+    # Exit a parse tree produced by ExprParser#tPostFix.
+    def exitTPostFix(self, ctx:ExprParser.TPostFixContext):
         pass
 
 

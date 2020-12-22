@@ -46,7 +46,7 @@ statement
     | 'continue' ';' #contStmt
     ;
 declaration
-    : typ Identifier ('=' expression)? 
+    : typ Identifier ('[' Integer ']')* ('=' expression)? 
     ;
 expr_list
     : (expression (',' expression)*)?
@@ -74,6 +74,7 @@ unary
 postfix
     : atom #tPostFix
     | Identifier '(' expr_list ')' #cPostFix
+    | postfix '[' expression ']' #aPostFix
     ;
 atom
     : Integer         # atomInteger

@@ -174,13 +174,18 @@ class ExprVisitor(ParseTreeVisitor):
         return self.visitChildren(ctx)
 
 
-    # Visit a parse tree produced by ExprParser#tPostFix.
-    def visitTPostFix(self, ctx:ExprParser.TPostFixContext):
+    # Visit a parse tree produced by ExprParser#cPostFix.
+    def visitCPostFix(self, ctx:ExprParser.CPostFixContext):
         return self.visitChildren(ctx)
 
 
-    # Visit a parse tree produced by ExprParser#cPostFix.
-    def visitCPostFix(self, ctx:ExprParser.CPostFixContext):
+    # Visit a parse tree produced by ExprParser#aPostFix.
+    def visitAPostFix(self, ctx:ExprParser.APostFixContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by ExprParser#tPostFix.
+    def visitTPostFix(self, ctx:ExprParser.TPostFixContext):
         return self.visitChildren(ctx)
 
 

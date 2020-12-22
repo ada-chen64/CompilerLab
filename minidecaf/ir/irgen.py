@@ -23,12 +23,28 @@ class OffsetManage:
 class LabelCounter:
     def __init__(self):
         self._labels = {}
+        self.loop_cont = []
+        self.loop_exit = []
     def addLabel(self, lab= "LABEL"):
         if lab not in self._labels:
             self._labels[lab] = 1
         else:
             self._labels[lab] += 1
         return f"{lab}{self._labels[lab]}"
+    def enterLoop(self, cont, ex):
+        self.loop_cont.append(cont)
+        self.loop_exit.append(ex)
+    def exitLoop(self):
+        self.loop_cont.pop()
+        self.loop_exit.pop()
+    def breakLoop(self):
+        if len(self.loop_exit) == 0:
+            raise ExprLocatedError("not in loop")
+        return self.loop_exit[-1]
+    def contLoop(self):
+        if len(self.loop_cont) == 0:
+            raise ExprLocatedError("not in loop")
+        return self.loop_cont[-1]
     def getLabel(self, lab= "LABEL"):
         return f"{lab}{self._labels[lab]}"
 class StackIRGen(ExprVisitor):
@@ -42,9 +58,9 @@ class StackIRGen(ExprVisitor):
         self._frameSlots = [] #keeps track of frame slots used for each block
         self._curFrameSlot = 0 #frame slots used for THIS block
         self._varstack = stack_dict() #dict entry for each block
-    def decVar(self, ctx, ident):
-        self._curFrameSlot += 1
-        self._varstack[text(ident)] = Variables(text(ident), -INT_SIZE * self._curFrameSlot)
+    def decVar(self, ctx, ident, numInts=1):
+        self._curFrameSlot += numInts
+        self._varstack[text(ident)] = Variables(text(ident), -INT_SIZE * self._curFrameSlot, INT_SIZE * numInts)
     def getVar(self, ctx, ident):
         return self._varstack[text(ident)]
     def newBlock(self, ctx):
@@ -57,7 +73,13 @@ class StackIRGen(ExprVisitor):
         self._frameSlots.pop()
         return slots_to_release
         #self.offset = OffsetManage()
-    
+    def getVarsize(self, ctx:ExprParser.DeclarationContext):
+        size = product([int(text(x)) for x in ctx.Integer()])
+        if size <= 0:
+            raise ExprLocatedError(ctx, f"array size cannot be zero")
+        if size > MAX_INT:
+            raise ExprLocatedError(ctx, f"array size too big")
+        return size
     def doGlobalInitializer(self, ctx:ExprParser.ExpressionContext):
         if ctx is None:
             return None
@@ -73,8 +95,8 @@ class StackIRGen(ExprVisitor):
         ident = text(ctx.Identifier())
         if ident in self._functionManager.paramInfos:
             raise ExprLocatedError(ctx, f"conflict global variable and function {func}")
-        var = Variables(ident, None)
-        globInfo = GlobalInfo(INT_SIZE, var, init)
+        var = Variables(ident, None, INT_SIZE * self.getVarsize(ctx))
+        globInfo = GlobalInfo(INT_SIZE * self.getVarsize(ctx), var, init)
         if ident in self._varstack.peek():
             prevVar = self._varstack[ident]
             prevGlobalInfo = self._functionManager.globalInfos[prevVar]
@@ -94,6 +116,7 @@ class StackIRGen(ExprVisitor):
         for var, value in self._functionManager.globalInfos.items():
             if func_name == var.ident:
                 raise ExprLocatedError(ctx, f"conflict global variable and function {func_name}")  
+        
         self.newBlock(ctx)
         paramInfo = ParamInfo(ctx.param_list().accept(self))
         if func_name in self._functionManager.paramInfos:
@@ -101,8 +124,13 @@ class StackIRGen(ExprVisitor):
                 raise ExprLocatedError(ctx, f"conflicting types for {func}")
         self._functionManager.enterfunction(func_name, paramInfo)
         self._E.enterfunction(func_name, paramInfo)
+        self._E(instr.Comment("[ir-Block Enter]"))
         ctx.temp_stmt().accept(self)
-        self.popBlock(ctx)
+        self._E(instr.Comment("[ir-Block Exit"))
+        pt = self.popBlock(ctx)
+        self._E(instr.Comment("Pop"))
+        for i in range(pt):
+            self._E(instr.Pop())
         self._E.exitfunction()
     def visitFuncDecl(self, ctx:ExprParser.FuncDeclContext):
         #print("in func decl")
@@ -120,13 +148,13 @@ class StackIRGen(ExprVisitor):
             self._functionManager.paramInfos[func_name] = paramInfo
         self.popBlock(ctx)
     def visitCompound_statement(self, ctx:ExprParser.Compound_statementContext):
-        self._E(instr.Comment("new Block cmpd_stmt"))
+        self._E(instr.Comment("[ir-block enter]"))
         self.newBlock(ctx)
         self.visitChildren(ctx)
+        self._E(instr.Comment("[ir-block exit]"))
         pt = self.popBlock(ctx)
         #print("pop time",pt)
         for i in range(pt):
-            self._E(instr.Comment("Pop"))
             self._E(instr.Pop())
     def visitReturnStmt(self, ctx:ExprParser.ReturnStmtContext):
         #print("visit return")
@@ -142,17 +170,19 @@ class StackIRGen(ExprVisitor):
     def visitDeclaration(self, ctx:ExprParser.DeclarationContext):
         
         ident = ctx.Identifier()
+        if text(ident) in self._varstack.peek():
+            raise ExprLocatedError(ctx, f"redefinition of {text(ident)}")
+        self.decVar(ctx, ident, self.getVarsize(ctx))
+        var = self._varstack[text(ident)]
         self._E(instr.Comment(f"new declaration {text(ident)}"))
         if ctx.expression() is not None:
             ctx.expression().accept(self)
         else:
-            self._E(instr.Const(0))
-        if text(ident) in self._varstack.peek():
-            raise ExprLocatedError(ctx, f"redefinition of {text(ident)}")
-        self.decVar(ctx, ident)
-        #self.offset.addVar(var)
+            for i in range(var.size //INT_SIZE):
+                self._E(instr.Const(0))
         
-        #self.addVar(var)
+        
+        
     def visitCondStmt(self, ctx:ExprParser.CondStmtContext):
         #first take care of the if condition expression
         self._E(instr.Comment("if statement"))
@@ -182,15 +212,21 @@ class StackIRGen(ExprVisitor):
         #first do initialize expression
         self._E(instr.Comment("for Block"))
         self.newBlock(ctx)
+        begin_looplabel = self._labelCounter.addLabel("for_enter")
+        break_label = self._labelCounter.addLabel("for_exit")
+        cont_label = self._labelCounter.addLabel("for_continue")
+        self._labelCounter.enterLoop(cont_label, break_label)
         if ctx.init is not None:
             ctx.init.accept(self)
-        begin_looplabel = self._labelCounter.addLabel("beginloop_Label")
-        break_label = self._labelCounter.addLabel("breakloop_Label")
-        cont_label = self._labelCounter.addLabel("continue_Label")
+            if isinstance(ctx.init, ExprParser.ExpressionContext):
+                self._E(instr.Pop())
+        
         self._E(instr.Label(begin_looplabel))
         if ctx.cond is not None:
             ctx.cond.accept(self)
-            self._E(instr.Branch("beqz", break_label))
+        else:
+            self._E(instr.Const(1))
+        self._E(instr.Branch("beqz", break_label))
         ctx.statement().accept(self)
         self._E(instr.Label(cont_label))
         if ctx.incr is not None:
@@ -203,14 +239,16 @@ class StackIRGen(ExprVisitor):
         self._E(instr.Comment("for Pop"))
         for i in range(pt):
             self._E(instr.Pop())
+        self._labelCounter.exitLoop()
     
     def visitForDeclStmt(self, ctx:ExprParser.ForDeclStmtContext):
         self._E(instr.Comment("for Block"))
         self.newBlock(ctx)
         ctx.declaration().accept(self)
-        begin_looplabel = self._labelCounter.addLabel("beginloop_Label")
-        break_label = self._labelCounter.addLabel("breakloop_Label")
-        cont_label = self._labelCounter.addLabel("continue_Label")
+        begin_looplabel = self._labelCounter.addLabel("for_enter")
+        break_label = self._labelCounter.addLabel("for_exit")
+        cont_label = self._labelCounter.addLabel("for_continue")
+        self._labelCounter.enterLoop(cont_label, break_label)
         self._E(instr.Label(begin_looplabel))
         if ctx.cond is not None:
             ctx.cond.accept(self)
@@ -227,10 +265,12 @@ class StackIRGen(ExprVisitor):
         for i in range(pt):
             self._E(instr.Comment("Pop"))
             self._E(instr.Pop())
+        self._labelCounter.exitLoop()
     def visitWhileStmt(self, ctx:ExprParser.WhileStmtContext):
-        begin_looplabel = self._labelCounter.addLabel("beginloop_Label")
-        break_label = self._labelCounter.addLabel("breakloop_Label")
-        cont_label = self._labelCounter.addLabel("continue_Label")
+        begin_looplabel = self._labelCounter.addLabel("while_enter")
+        break_label = self._labelCounter.addLabel("while_exit")
+        cont_label = self._labelCounter.addLabel("while_cont")
+        self._labelCounter.enterLoop(cont_label, break_label)
         self._E(instr.Label(begin_looplabel))
         ctx.expression().accept(self)
         self._E(instr.Branch("beqz", break_label))
@@ -238,12 +278,13 @@ class StackIRGen(ExprVisitor):
         self._E(instr.Label(cont_label))
         self._E(instr.Branch("br", begin_looplabel))
         self._E(instr.Label(break_label))
-
+        self._labelCounter.exitLoop()
 
     def visitDoStmt(self, ctx:ExprParser.DoStmtContext):
-        begin_looplabel = self._labelCounter.addLabel("beginloop_Label")
-        break_label = self._labelCounter.addLabel("breakloop_Label")
-        cont_label = self._labelCounter.addLabel("continue_Label")
+        begin_looplabel = self._labelCounter.addLabel("while_enter")
+        break_label = self._labelCounter.addLabel("while_exit")
+        cont_label = self._labelCounter.addLabel("while_cont")
+        self._labelCounter.enterLoop(cont_label, break_label)
         self._E(instr.Label(begin_looplabel))
         ctx.expression().accept(self)
         self._E(instr.Branch("beqz", break_label))
@@ -251,13 +292,14 @@ class StackIRGen(ExprVisitor):
         self._E(instr.Label(cont_label))
         self._E(instr.Branch("br", begin_looplabel))
         self._E(instr.Label(break_label))
+        self._labelCounter.exitLoop()
 
     
     def visitBreakStmt(self, ctx:ExprParser.BreakStmtContext):
-        self._E(instr.Branch("br", self._labelCounter.getLabel("breakloop_Label")))
+        self._E(instr.Branch("br", self._labelCounter.breakLoop()))
 
     def visitContStmt(self, ctx:ExprParser.ContStmtContext):
-        self._E(instr.Branch("br", self._labelCounter.getLabel("continue_Label")))
+        self._E(instr.Branch("br", self._labelCounter.contLoop()))
 
     def visitAtomIdentifier(self, ctx:ExprParser.AtomIdentifierContext):
         #print("AtomIdentifier")
@@ -347,7 +389,7 @@ class StackIRGen(ExprVisitor):
                 rhs.accept(self)
                 self._E(instr.Const(sz))
                 self._E(instr.Binaries('*'))
-                self._E(instr.Binary(op))
+                self._E(instr.Binaries(op))
         else:
             sz = self.typeInfo[rhs].sizeof()
             if isinstance(self.typeInfo[rhs], PtrType): # int +- ptr
@@ -419,3 +461,12 @@ class StackIRGen(ExprVisitor):
         for arg in reversed(args):
             arg.accept(self)
         self._E(instr.Call(func_name))
+    def visitAPostFix(self, ctx:ExprParser.APostFixContext):
+        fixupMult = self.typeInfo[ctx.postfix()].basetype.sizeof()
+        ctx.postfix().accept(self)
+        ctx.expression().accept(self)
+        self._E(instr.Const(fixupMult))
+        self._E(instr.Binaries('*'))
+        self._E(instr.Binaries('+'))
+        if not isinstance(self.typeInfo[ctx], ArrayType):
+            self._E(instr.Load())

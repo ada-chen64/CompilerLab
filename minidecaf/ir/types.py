@@ -40,25 +40,25 @@ class PtrType(Type):
         return INT_SIZE
 
 class ArrayType(Type):
-    def __init__(self, base:Type, len:int):
-        self.base = base
+    def __init__(self, basetype:Type, len:int):
+        self.basetype = basetype
         self.len = len
 
     def __str__(self):
-        return f"[{self.len}]{self.base}"
+        return f"[{self.len}]{self.basetype}"
 
     def __eq__(self, other):
         if not isinstance(other, ArrayType):
             return False
-        return self.base == other.base and self.len == other.len
+        return self.basetype == other.basetype and self.len == other.len
 
-    def make(base:Type, dims:list):
+    def make(basetype:Type, dims:list):
         for len in dims:
-            base = ArrayType(base, len)
-        return base
+            basetype = ArrayType(basetype, len)
+        return basetype
 
     def sizeof(self):
-        return self.base.sizeof() * self.len
+        return self.basetype.sizeof() * self.len
 
 def TypeRule(f):
     """A type rule is a function: (ctx, *inputTypes) -> {outputType | errStr | None}.
@@ -66,9 +66,9 @@ def TypeRule(f):
     def g(ctx, *inTy):
         res = f(ctx, *inTy)
         if type(res) is str:
-            raise ExprLocatedError(ctx, f"{f.__name__}: {res}")
+            raise ExprTypesError(ctx, f"{f.__name__}: {res}")
         if res is None:
-            raise ExprLocatedError(ctx, f"{f.__name__}: type error")
+            raise ExprTypesError(ctx, f"{f.__name__}: type error")
         return res
     g.__name__ = f.__name__ # black magic
     return g
@@ -166,3 +166,11 @@ def stmtCondRule(ctx, typ):
     if typ != IntType():
         return f"expected IntType, got {typ}"
     return IntType()
+
+@TypeRule
+def arrayRule(ctx, arr, idx):
+    if not isinstance(arr, ArrayType) and not isinstance(arr, PtrType):
+        return f"array/pointer expected, {arr} found"
+    if idx != IntType():
+        return f"index must be an integer, {idx} found"
+    return arr.basetype
